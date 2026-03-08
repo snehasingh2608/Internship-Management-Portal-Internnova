@@ -1,8 +1,10 @@
+const dotenv = require("dotenv");
+const path = require("path");
+dotenv.config({ path: path.join(__dirname, ".env") });
+
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 const fs = require("fs");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
 const uploadsDir = path.join(__dirname, "uploads");
@@ -16,9 +18,6 @@ const applicationRoutes = require("./routes/applicationRoutes");
 const userRoutes = require("./routes/userRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const nocRequestRoutes = require("./routes/nocRequestRoutes");
-
-dotenv.config();
-connectDB();
 
 const app = express();
 
@@ -44,4 +43,13 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+async function startServer() {
+  await connectDB();
+  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+}
+
+startServer().catch((err) => {
+  console.error("Server failed to start:", err);
+  process.exit(1);
+});
