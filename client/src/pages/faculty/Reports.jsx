@@ -1,25 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../layout/Navbar';
 import Sidebar from '../../layout/Sidebar';
+import api from '../../api/api';
 
 const Reports = () => {
-    const [selectedReport, setSelectedReport] = useState(null);
     const [filterType, setFilterType] = useState('all');
+    const [analytics, setAnalytics] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-    const reportCategories = [
-        { id: 1, title: 'Internship Records (Batch 2025)', type: 'Excel', date: 'Generated: Today', chartType: 'pie', data: [70, 30], labels: ['Placed', 'Seeking'], icon: '📊', color: 'from-blue-500 to-blue-600' },
-        { id: 2, title: 'Placement Statistics', type: 'PDF', date: 'Generated: Yesterday', chartType: 'bar', data: [45, 80, 20], labels: ['CSE', 'ECE', 'Mech'], icon: '📈', color: 'from-green-500 to-green-600' },
-        { id: 3, title: 'Monthly Attendance Summary', type: 'PDF', date: 'Generated: 2 days ago', chartType: 'pie', data: [85, 15], labels: ['Present', 'Absent'], icon: '✅', color: 'from-purple-500 to-purple-600' },
-        { id: 4, title: 'Pending NOC Requests', type: 'CSV', date: 'Generated: Today', chartType: 'bar', data: [12, 5, 8], labels: ['CSE', 'ECE', 'BCA'], icon: '📋', color: 'from-orange-500 to-orange-600' },
-        { id: 5, title: 'Internship to PPO Conversion', type: 'PDF', date: 'Generated: Today', chartType: 'pie', data: [40, 60], labels: ['Converted', 'Intern Only'], icon: '🎯', color: 'from-pink-500 to-pink-600' },
-    ];
+    useEffect(() => {
+        const fetchAnalytics = async () => {
+            setLoading(true);
+            setError('');
+            try {
+                const res = await api.get('/reports/internship-analytics');
+                setAnalytics(res.data);
+            } catch (err) {
+                setError(err.response?.data?.message || 'Failed to load internship analytics');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAnalytics();
+    }, []);
+
+    const placementRate = analytics ? Math.round(analytics.placementRate || 0) : 0;
+    const totalRecords = analytics?.totalRecords || 0;
+    const placements = analytics?.placements || 0;
+    const internships = analytics?.internships || 0;
+    const internshipPPO = analytics?.internshipPPO || 0;
+    const lastUpdated = analytics ? new Date().toLocaleString() : '—';
 
     const stats = [
-        { label: 'Total Reports', value: '5', icon: '📄', color: 'bg-blue-50 text-blue-600' },
-        { label: 'Generated Today', value: '3', icon: '⚡', color: 'bg-green-50 text-green-600' },
-        { label: 'Placement Rate', value: '70%', icon: '🎓', color: 'bg-purple-50 text-purple-600' },
-        { label: 'Last Updated', value: 'Today', icon: '🕐', color: 'bg-orange-50 text-orange-600' },
+        { label: 'Total Records', value: String(totalRecords), icon: '📄', color: 'bg-blue-50 text-blue-600' },
+        { label: 'Placements', value: String(placements + internshipPPO), icon: '🎓', color: 'bg-green-50 text-green-600' },
+        { label: 'Placement Rate', value: `${placementRate}%`, icon: '📊', color: 'bg-purple-50 text-purple-600' },
+        { label: 'Last Updated', value: lastUpdated, icon: '🕐', color: 'bg-orange-50 text-orange-600' },
     ];
+
+    const reportCategories = analytics
+        ? [
+            {
+                id: 1,
+                title: 'Placement Statistics',
+                type: 'Analytics',
+                date: `Updated: ${lastUpdated}`,
+                chartType: 'pie',
+                data: [placements, internships, internshipPPO],
+                labels: ['Placement', 'Internship', 'Internship + PPO'],
+                icon: '📈',
+                color: 'from-green-500 to-green-600',
+            },
+            {
+                id: 2,
+                title: 'Internship to PPO Conversion',
+                type: 'Analytics',
+                date: `Updated: ${lastUpdated}`,
+                chartType: 'pie',
+                data: [internshipPPO, Math.max(placements + internships, 0)],
+                labels: ['Internship + PPO', 'Other (Placement/Internship)'],
+                icon: '🎯',
+                color: 'from-pink-500 to-pink-600',
+            },
+        ]
+        : [];
 
     const getTypeColor = (type) => {
         const colors = {
@@ -30,23 +76,32 @@ const Reports = () => {
         return colors[type] || 'bg-gray-100 text-gray-800';
     };
 
-    const filteredReports = filterType === 'all' 
-        ? reportCategories 
+    const filteredReports = filterType === 'all'
+        ? reportCategories
         : reportCategories.filter(r => r.type === filterType);
 
     const renderChart = (report) => {
         if (report.chartType === 'pie') {
-            const [v1, v2] = report.data;
-            const dashArray = `${v1} ${100 - v1}`;
+            const values = report.data.map((v) => Number(v) || 0);
+            const total = values.reduce((a, b) => a + b, 0);
+            const pct = total === 0 ? values.map(() => 0) : values.map((v) => Math.round((v / total) * 100));
+            const firstPct = pct[0] || 0;
             return (
                 <div className="flex flex-col items-center justify-center py-4 transition-all duration-500 ease-in-out">
                     <svg width="150" height="150" viewBox="0 0 32 32" className="transform -rotate-90 rounded-full shadow-lg">
                         <circle r="16" cx="16" cy="16" fill="#EEE" />
-                        <circle r="16" cx="16" cy="16" fill="transparent" stroke="#4F46E5" strokeWidth="32" strokeDasharray={`${v1} 100`} />
+                        <circle r="16" cx="16" cy="16" fill="transparent" stroke="#4F46E5" strokeWidth="32" strokeDasharray={`${firstPct} 100`} />
                     </svg>
-                    <div className="mt-4 flex space-x-4 text-sm">
-                        <div className="flex items-center"><span className="w-3 h-3 bg-indigo-600 rounded-full mr-2"></span>{report.labels[0]}: {v1}%</div>
-                        <div className="flex items-center"><span className="w-3 h-3 bg-gray-200 rounded-full mr-2"></span>{report.labels[1]}: {v2}%</div>
+                    <div className="mt-4 grid grid-cols-1 gap-2 text-sm w-full">
+                        {report.labels.map((label, idx) => (
+                            <div key={label} className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <span className={`w-3 h-3 ${idx === 0 ? 'bg-indigo-600' : idx === 1 ? 'bg-gray-400' : 'bg-emerald-500'} rounded-full mr-2`}></span>
+                                    <span className="text-gray-700">{label}</span>
+                                </div>
+                                <span className="font-semibold text-gray-900">{values[idx]} ({pct[idx]}%)</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
             );
@@ -87,17 +142,29 @@ const Reports = () => {
 
                         {/* Statistics Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                            {stats.map((stat, idx) => (
-                                <div key={idx} className={`${stat.color} rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}>
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-sm font-medium text-gray-600 mb-1">{stat.label}</p>
-                                            <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                                        </div>
-                                        <span className="text-4xl">{stat.icon}</span>
+                            {loading ? (
+                                <div className="col-span-4 flex items-center justify-center">
+                                    <div className="text-gray-500">Loading analytics...</div>
+                                </div>
+                            ) : error ? (
+                                <div className="col-span-4 flex items-center justify-center">
+                                    <div className="px-4 py-3 rounded-lg bg-red-50 text-red-700 text-sm">
+                                        {error}
                                     </div>
                                 </div>
-                            ))}
+                            ) : (
+                                stats.map((stat, idx) => (
+                                    <div key={idx} className={`${stat.color} rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}>
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-600 mb-1">{stat.label}</p>
+                                                <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                                            </div>
+                                            <span className="text-4xl">{stat.icon}</span>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
 
                         {/* Filter Section */}
@@ -146,7 +213,13 @@ const Reports = () => {
 
                         {/* Reports Grid */}
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                            {filteredReports.map((report) => (
+                            {loading && !error && (
+                                <div className="col-span-3 text-center text-gray-500">Loading charts...</div>
+                            )}
+                            {!loading && error && (
+                                <div className="col-span-3 text-center text-red-600">Unable to load charts.</div>
+                            )}
+                            {!loading && !error && filteredReports.map((report) => (
                                 <div
                                     key={report.id}
                                     className="bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-indigo-200 transform hover:-translate-y-2 flex flex-col"
@@ -172,31 +245,17 @@ const Reports = () => {
                                         </div>
 
                                         {/* Chart Section */}
-                                        {selectedReport === report.id && (
-                                            <div className="mt-4 border-t border-gray-100 pt-4 animate-fadeIn">
-                                                {renderChart(report)}
-                                            </div>
-                                        )}
+                                        <div className="mt-4 border-t border-gray-100 pt-4">
+                                            {renderChart(report)}
+                                        </div>
                                     </div>
 
                                     {/* Card Footer */}
                                     <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-t border-gray-100 flex justify-between items-center">
-                                        <button
-                                            onClick={() => setSelectedReport(selectedReport === report.id ? null : report.id)}
-                                            className="flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors duration-200"
-                                        >
-                                            {selectedReport === report.id ? (
-                                                <>
-                                                    <span>📊</span>
-                                                    <span>Hide Visuals</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <span>📈</span>
-                                                    <span>View Visuals</span>
-                                                </>
-                                            )}
-                                        </button>
+                                        <div className="text-sm font-semibold text-indigo-700 flex items-center gap-2">
+                                            <span>📈</span>
+                                            <span>Live Analytics</span>
+                                        </div>
                                         <button className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors duration-200 flex items-center gap-1">
                                             <span>⬇️</span>
                                             Download
