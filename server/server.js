@@ -6,6 +6,7 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const connectDB = require("./config/db");
+const reportRoutes = require("./routes/reportRoutes");
 
 const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
@@ -37,6 +38,7 @@ app.use("/api/applications", applicationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/noc-requests", nocRequestRoutes);
+app.use("/api/reports", reportRoutes);
 
 app.get("/", (req, res) => {
   res.send("Internnova Backend Running 🚀");

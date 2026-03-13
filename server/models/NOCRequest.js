@@ -2,7 +2,14 @@ const mongoose = require("mongoose");
 
 const nocRequestSchema = new mongoose.Schema(
   {
-    studentId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    studentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    // denormalized student info for reporting
+    studentName: { type: String, default: "" },
+    rollNumber: { type: String, default: "" },
     companyName: { type: String, required: true },
     companyType: { type: String, default: "" },
     domain: { type: String, default: "" },

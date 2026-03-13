@@ -1,6 +1,7 @@
 const AttendanceLog = require("../models/AttendanceLog");
 const Application = require("../models/Application");
 const Internship = require("../models/Internship");
+const InternshipRecord = require("../models/InternshipRecord");
 
 exports.getStudentsWithInternships = async (req, res) => {
   try {
@@ -73,5 +74,53 @@ exports.getAllLogs = async (req, res) => {
     res.json(logs);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+// GET /api/attendance/internship-attendance
+// Returns flattened attendance rows for all internshipRecords
+exports.getInternshipAttendance = async (req, res) => {
+  try {
+    const records = await InternshipRecord.find({});
+
+    const rows = [];
+
+    records.forEach((record) => {
+      const common = {
+        studentName: record.student_name || "",
+        rollNumber: record.roll_number || "",
+        internship:
+          record.name_of_the_organization_from_where_internship_is_done || "",
+        semester: record.semester || "",
+        program: record.program || "",
+      };
+
+      if (record.attend_ance_jan !== undefined) {
+        const attendance = record.attend_ance_jan;
+        rows.push({
+          ...common,
+          month: "Jan",
+          attendance,
+          status: attendance === "Y" ? "Present" : "Missing/Absent",
+        });
+      }
+
+      if (record.attend_ance_feb !== undefined) {
+        const attendance = record.attend_ance_feb;
+        rows.push({
+          ...common,
+          month: "Feb",
+          attendance,
+          status: attendance === "Y" ? "Present" : "Missing/Absent",
+        });
+      }
+    });
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Error fetching internship attendance:", err);
+    res
+      .status(500)
+      .json({ message: "Failed to load internship attendance records" });
   }
 };
