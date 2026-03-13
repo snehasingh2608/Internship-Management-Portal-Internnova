@@ -1,14 +1,10 @@
 const NOCRequest = require("../models/NOCRequest");
-<<<<<<< HEAD
 const InternshipRecord = require("../models/InternshipRecord");
 const User = require("../models/User");
-=======
->>>>>>> a98a36b35ff0b99c15b82464e1347e504a7a0010
 
 exports.create = async (req, res) => {
   try {
     const offerLetterUrl = req.file ? "/uploads/" + req.file.filename : "";
-<<<<<<< HEAD
     const student = await User.findById(req.user._id);
 
     const noc = await NOCRequest.create({
@@ -16,11 +12,6 @@ exports.create = async (req, res) => {
       studentId: req.user._id,
       studentName: student?.name || "",
       rollNumber: student?.rollNumber || "",
-=======
-    const noc = await NOCRequest.create({
-      ...req.body,
-      studentId: req.user._id,
->>>>>>> a98a36b35ff0b99c15b82464e1347e504a7a0010
       offerLetterUrl,
     });
     const populated = await NOCRequest.findById(noc._id).populate(
@@ -55,7 +46,6 @@ exports.getPending = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
 // GET /api/noc-requests
 exports.getAll = async (req, res) => {
   try {
@@ -89,9 +79,6 @@ exports.getByStudent = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-=======
->>>>>>> a98a36b35ff0b99c15b82464e1347e504a7a0010
 exports.approve = async (req, res) => {
   try {
     const noc = await NOCRequest.findByIdAndUpdate(
@@ -102,7 +89,6 @@ exports.approve = async (req, res) => {
         approvedAt: new Date(),
       },
       { new: true }
-<<<<<<< HEAD
     ).populate("studentId", "name email department year");
     if (!noc) return res.status(404).json({ message: "Request not found" });
 
@@ -130,11 +116,6 @@ exports.approve = async (req, res) => {
         { upsert: true, new: true }
       );
     }
-
-=======
-    ).populate("studentId", "name email");
-    if (!noc) return res.status(404).json({ message: "Request not found" });
->>>>>>> a98a36b35ff0b99c15b82464e1347e504a7a0010
     res.json(noc);
   } catch (err) {
     res.status(500).json({ message: err.message });
