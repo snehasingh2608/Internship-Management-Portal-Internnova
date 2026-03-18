@@ -23,7 +23,7 @@ const nocRequestSchema = new mongoose.Schema(
     offerLetterUrl: { type: String, default: "" },
     approvalStatus: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
+      enum: ["pending", "faculty_approved", "approved", "rejected"],
       default: "pending",
     },
     approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

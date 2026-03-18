@@ -16,6 +16,8 @@ import Reports from './pages/faculty/Reports';
 import AdminDashboard from './pages/admin/Dashboard';
 import UserManagement from './pages/admin/UserManagement';
 import ApproveInternships from './pages/admin/ApproveInternships';
+import NOCApproval from './pages/faculty/NOCApproval';
+import NOCApprovalAdmin from './pages/admin/NOCApprovalAdmin';
 import './App.css';
 
 function App() {
@@ -35,9 +37,11 @@ function App() {
           <Route path="/faculty/attendance" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceDashboard /></ProtectedRoute>} />
           <Route path="/faculty/attendance-monitoring" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceMonitoring /></ProtectedRoute>} />
           <Route path="/faculty/reports" element={<ProtectedRoute allowedRoles={['faculty']}><Reports /></ProtectedRoute>} />
+          <Route path="/faculty/noc-approval" element={<ProtectedRoute allowedRoles={['faculty']}><NOCApproval /></ProtectedRoute>} />
           <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin']}><UserManagement /></ProtectedRoute>} />
           <Route path="/admin/internships" element={<ProtectedRoute allowedRoles={['admin']}><ApproveInternships /></ProtectedRoute>} />
+          <Route path="/admin/noc-approval" element={<ProtectedRoute allowedRoles={['admin']}><NOCApprovalAdmin /></ProtectedRoute>} />
           <Route path="*" element={<div className="p-10 text-center">404 - Not Found</div>} />
         </Routes>
       </Router>

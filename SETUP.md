@@ -71,7 +71,7 @@
 |------|----------------|
 | Student | /student/dashboard |
 | Faculty | /faculty/dashboard |
-| Admin | /admin/dashboard |
+
 
 ## Creating First Admin
 1. Register a new user at /register (choose Faculty or Student)

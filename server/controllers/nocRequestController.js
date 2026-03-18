@@ -79,6 +79,22 @@ exports.getByStudent = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+exports.facultyApprove = async (req, res) => {
+  try {
+    const noc = await NOCRequest.findByIdAndUpdate(
+      req.params.id,
+      {
+        approvalStatus: "faculty_approved",
+      },
+      { new: true }
+    ).populate("studentId", "name email department year");
+    if (!noc) return res.status(404).json({ message: "Request not found" });
+    res.json(noc);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.approve = async (req, res) => {
   try {
     const noc = await NOCRequest.findByIdAndUpdate(

@@ -101,8 +101,11 @@ export const nocAPI = {
   },
   getMyRequests: () => api.get("/noc-requests/my"),
   getPending: () => api.get("/noc-requests/pending"),
-  approve: (id) => api.put(`/noc-requests/${id}/approve`),
-  reject: (id, remarks) => api.put(`/noc-requests/${id}/reject`, { remarks }),
+  getAll: () => api.get("/noc-requests"),
+  approve: (id) => api.put(`/noc-requests/${id}/approve`), // kept for backwards compatibility
+  facultyApprove: (id) => api.put(`/noc-requests/faculty-approve/${id}`),
+  adminApprove: (id) => api.put(`/noc-requests/admin-approve/${id}`),
+  reject: (id, remarks) => api.put(`/noc-requests/reject/${id}`, { remarks }),
 };
 
 export default api;
