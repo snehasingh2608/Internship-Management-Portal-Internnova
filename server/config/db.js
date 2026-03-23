@@ -23,6 +23,7 @@ const connectDB = async () => {
     if (error.message.includes("ENOTFOUND") || error.message.includes("getaddrinfo")) {
       console.error("→ Check: MongoDB Atlas cluster URL and DNS. Is the cluster running?");
     }
+    
     if (error.message.includes("authentication failed") || error.message.includes("auth")) {
       console.error("→ Check: Username and password in MONGO_URI. Escape special chars in password (e.g. @ → %40).");
     }
