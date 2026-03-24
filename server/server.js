@@ -23,7 +23,7 @@ const nocRequestRoutes = require("./routes/nocRequestRoutes");
 const app = express();
 
 app.use(cors({
-  origin: "https://internship-management-portal-intern.vercel.app/"
+  origin: "https://internship-management-portal-intern.vercel.app"
 }));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
