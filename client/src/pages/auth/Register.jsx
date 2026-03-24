@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { authAPI } from '../../api/api';
+import { useAuth } from '../../context/AuthContext';
 
 const Register = () => {
     const navigate = useNavigate();
+    const { register } = useAuth();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -24,9 +25,8 @@ const Register = () => {
         setError('');
         setLoading(true);
         try {
-            const { data } = await authAPI.register(formData);
+            const data = await register(formData);
             if (data.token) {
-                localStorage.setItem('token', data.token);
                 const user = data.user;
                 if (user.role === 'student') navigate('/student/dashboard');
                 else if (user.role === 'faculty') navigate('/faculty/dashboard');

@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { authAPI } from '../api/api';
 
 const AuthContext = createContext(null);
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
@@ -16,17 +14,6 @@ export const AuthProvider = ({ children }) => {
 
   const getToken = () => localStorage.getItem('token');
 
-  const api = axios.create({
-    baseURL: API_URL,
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  api.interceptors.request.use((config) => {
-    const token = getToken();
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  });
-
   const fetchUser = async () => {
     const token = getToken();
     if (!token) {
@@ -34,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       return;
     }
     try {
-      const { data } = await api.get('/api/auth/me');
+      const { data } = await authAPI.getMe();
       setUser(data.user);
     } catch {
       localStorage.removeItem('token');
@@ -49,7 +36,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const { data } = await api.post('/api/auth/login', { email, password });
+    const { data } = await authAPI.login(email, password);
     localStorage.setItem('token', data.token);
     setUser(data.user);
     return data.user;
@@ -61,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
-    const { data } = await api.post('/api/auth/register', userData);
+    const { data } = await authAPI.register(userData);
     if (data.token) {
       localStorage.setItem('token', data.token);
       setUser(data.user);
@@ -70,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, register, api, getToken, fetchUser }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register, getToken, fetchUser }}>
       {children}
     </AuthContext.Provider>
   );
