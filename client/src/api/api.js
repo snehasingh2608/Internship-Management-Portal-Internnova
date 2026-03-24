@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -27,35 +27,35 @@ api.interceptors.response.use(
 
 // Auth
 export const authAPI = {
-  login: (email, password) => api.post("/auth/login", { email, password }),
-  register: (data) => api.post("/auth/register", data),
-  getMe: () => api.get("/auth/me"),
+  login: (email, password) => api.post("/api/auth/login", { email, password }),
+  register: (data) => api.post("/api/auth/register", data),
+  getMe: () => api.get("/api/auth/me"),
 };
 
 // Internships
 export const internshipAPI = {
-  getAll: () => api.get("/internships"),
-  getById: (id) => api.get(`/internships/${id}`),
-  create: (data) => api.post("/internships", data),
-  update: (id, data) => api.put(`/internships/${id}`, data),
-  getMyListings: () => api.get("/internships/my"),
+  getAll: () => api.get("/api/internships"),
+  getById: (id) => api.get(`/api/internships/${id}`),
+  create: (data) => api.post("/api/internships", data),
+  update: (id, data) => api.put(`/api/internships/${id}`, data),
+  getMyListings: () => api.get("/api/internships/my"),
 };
 
 // Applications
 export const applicationAPI = {
-  apply: (internshipId) => api.post("/applications", { internshipId }),
-  getMyApplications: () => api.get("/applications/my"),
-  getByInternship: (internshipId) => api.get(`/applications/internship/${internshipId}`),
+  apply: (internshipId) => api.post("/api/applications", { internshipId }),
+  getMyApplications: () => api.get("/api/applications/my"),
+  getByInternship: (internshipId) => api.get(`/api/applications/internship/${internshipId}`),
 };
 
 // Users
 export const userAPI = {
-  getAll: () => api.get("/users"),
-  getById: (id) => api.get(`/users/${id}`),
-  create: (data) => api.post("/users", data),
-  update: (id, data) => api.put(`/users/${id}`, data),
-  delete: (id) => api.delete(`/users/${id}`),
-  getProfile: () => api.get("/users/profile/me"),
+  getAll: () => api.get("/api/users"),
+  getById: (id) => api.get(`/api/users/${id}`),
+  create: (data) => api.post("/api/users", data),
+  update: (id, data) => api.put(`/api/users/${id}`, data),
+  delete: (id) => api.delete(`/api/users/${id}`),
+  getProfile: () => api.get("/api/users/profile/me"),
   updateProfile: (data) => {
     const formData = new FormData();
     Object.keys(data).forEach((k) => {
@@ -70,7 +70,7 @@ export const userAPI = {
       }
     });
     if (data.resume instanceof File) formData.append("resume", data.resume);
-    return api.put("/users/profile/me", formData, {
+    return api.put("/api/users/profile/me", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
@@ -78,11 +78,11 @@ export const userAPI = {
 
 // Attendance
 export const attendanceAPI = {
-  getStudents: () => api.get("/attendance/students"),
-  getLogsByStudent: (studentId) => api.get(`/attendance/logs/${studentId}`),
-  getAllLogs: () => api.get("/attendance"),
-  approve: (id) => api.put(`/attendance/approve/${id}`),
-  getInternshipAttendance: () => api.get("/attendance/internship-attendance"),
+  getStudents: () => api.get("/api/attendance/students"),
+  getLogsByStudent: (studentId) => api.get(`/api/attendance/logs/${studentId}`),
+  getAllLogs: () => api.get("/api/attendance"),
+  approve: (id) => api.put(`/api/attendance/approve/${id}`),
+  getInternshipAttendance: () => api.get("/api/attendance/internship-attendance"),
 };
 
 // NOC Requests
@@ -95,17 +95,17 @@ export const nocAPI = {
       }
     });
     if (data.offerLetter instanceof File) formData.append("offerLetter", data.offerLetter);
-    return api.post("/noc-requests", formData, {
+    return api.post("/api/noc-requests", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
-  getMyRequests: () => api.get("/noc-requests/my"),
-  getPending: () => api.get("/noc-requests/pending"),
-  getAll: () => api.get("/noc-requests"),
-  approve: (id) => api.put(`/noc-requests/${id}/approve`), // kept for backwards compatibility
-  facultyApprove: (id) => api.put(`/noc-requests/faculty-approve/${id}`),
-  adminApprove: (id) => api.put(`/noc-requests/admin-approve/${id}`),
-  reject: (id, remarks) => api.put(`/noc-requests/reject/${id}`, { remarks }),
+  getMyRequests: () => api.get("/api/noc-requests/my"),
+  getPending: () => api.get("/api/noc-requests/pending"),
+  getAll: () => api.get("/api/noc-requests"),
+  approve: (id) => api.put(`/api/noc-requests/${id}/approve`), // kept for backwards compatibility
+  facultyApprove: (id) => api.put(`/api/noc-requests/faculty-approve/${id}`),
+  adminApprove: (id) => api.put(`/api/noc-requests/admin-approve/${id}`),
+  reject: (id, remarks) => api.put(`/api/noc-requests/reject/${id}`, { remarks }),
 };
 
 export default api;

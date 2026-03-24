@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext(null);
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
       return;
     }
     try {
-      const { data } = await api.get('/auth/me');
+      const { data } = await api.get('/api/auth/me');
       setUser(data.user);
     } catch {
       localStorage.removeItem('token');
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const { data } = await api.post('/auth/login', { email, password });
+    const { data } = await api.post('/api/auth/login', { email, password });
     localStorage.setItem('token', data.token);
     setUser(data.user);
     return data.user;
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
-    const { data } = await api.post('/auth/register', userData);
+    const { data } = await api.post('/api/auth/register', userData);
     if (data.token) {
       localStorage.setItem('token', data.token);
       setUser(data.user);
