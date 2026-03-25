@@ -4,7 +4,7 @@ import Sidebar from '../../layout/Sidebar';
 import { attendanceAPI } from '../../api/api';
 
 const AttendanceMonitoring = () => {
-    const [rows, setRows] = useState([]);
+    const [attendanceData, setAttendanceData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -13,11 +13,12 @@ const AttendanceMonitoring = () => {
             setLoading(true);
             setError('');
             try {
-                const res = await attendanceAPI.getInternshipAttendance();
-                setRows(res.data || []);
+                const res = await attendanceAPI.getAllAttendanceLogs();
+                console.log(res.data);
+                setAttendanceData(res.data || []);
             } catch (err) {
                 setError(err.response?.data?.message || 'Failed to load internship attendance');
-                setRows([]);
+                setAttendanceData([]);
             } finally {
                 setLoading(false);
             }
@@ -43,7 +44,7 @@ const AttendanceMonitoring = () => {
                             <div className="bg-white shadow rounded-lg p-8 text-center text-red-600">
                                 {error}
                             </div>
-                        ) : rows.length === 0 ? (
+                        ) : attendanceData.length === 0 ? (
                             <div className="bg-white shadow rounded-lg p-8 text-center text-gray-500">
                                 No attendance records found.
                             </div>
@@ -53,7 +54,7 @@ const AttendanceMonitoring = () => {
                                     <div>
                                         <h3 className="text-lg leading-6 font-medium text-gray-900">Internship Attendance Records</h3>
                                         <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                                            Showing {rows.length} records from internshipRecords.
+                                            Showing {attendanceData.length} attendance records.
                                         </p>
                                     </div>
                                 </div>
@@ -62,22 +63,16 @@ const AttendanceMonitoring = () => {
                                         <thead className="bg-gray-50">
                                             <tr>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Student
+                                                    Student Name
                                                 </th>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Roll No.
-                                                </th>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Internship
-                                                </th>
-                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Program / Semester
+                                                    Internship Title
                                                 </th>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Month
                                                 </th>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Attendance Flag
+                                                    Attendance Percentage
                                                 </th>
                                                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Status
@@ -88,35 +83,31 @@ const AttendanceMonitoring = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
-                                            {rows.map((row, idx) => (
+                                            {attendanceData.map((record, idx) => (
                                                 <tr key={idx} className="hover:bg-gray-50">
                                                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                                                        {row.studentName || '-'}
+                                                        {record.studentName || '-'}
                                                     </td>
                                                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                                                        {row.rollNumber || '-'}
+                                                        {record.internship || '-'}
                                                     </td>
                                                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                                                        {row.internship || '-'}
+                                                        {record.month || '-'}
                                                     </td>
                                                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                                                        {row.program || '-'}{row.semester ? ` • Sem ${row.semester}` : ''}
-                                                    </td>
-                                                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                                                        {row.month}
-                                                    </td>
-                                                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                                                        {row.attendance ?? '-'}
+                                                        {record.attendance}%
                                                     </td>
                                                     <td className="px-4 py-3 whitespace-nowrap">
                                                         <span
                                                             className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                                                row.status === 'Present'
+                                                                record.status === 'Approved'
                                                                     ? 'bg-green-100 text-green-800'
-                                                                    : 'bg-yellow-100 text-yellow-800'
+                                                                    : record.status === 'Pending'
+                                                                    ? 'bg-yellow-100 text-yellow-800'
+                                                                    : 'bg-red-100 text-red-800'
                                                             }`}
                                                         >
-                                                            {row.status}
+                                                            {record.status}
                                                         </span>
                                                     </td>
                                                     <td className="px-4 py-3 whitespace-nowrap text-right text-sm">

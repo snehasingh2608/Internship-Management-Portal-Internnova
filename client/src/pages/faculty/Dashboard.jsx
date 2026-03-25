@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../layout/Navbar';
 import Sidebar from '../../layout/Sidebar';
 import { internshipAPI, applicationAPI } from '../../api/api';
+import Greeting from '../../components/Greeting';
 
 const FacultyDashboard = () => {
     const [internships, setInternships] = useState([]);
@@ -108,8 +109,9 @@ const FacultyDashboard = () => {
                 <Sidebar role="faculty" />
                 <main className="flex-1 p-6 md:p-8 overflow-y-auto">
                     <div className="max-w-7xl mx-auto">
+                        <Greeting />
                         <div className="flex justify-between items-center mb-6">
-                            <h1 className="text-2xl font-bold text-gray-900">Faculty Dashboard</h1>
+                            <h2 className="text-xl font-semibold text-gray-800">Faculty Dashboard</h2>
                             <button
                                 onClick={openCreate}
                                 className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors duration-200"

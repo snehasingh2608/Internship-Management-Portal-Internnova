@@ -83,6 +83,7 @@ export const attendanceAPI = {
   getAllLogs: () => api.get("/api/attendance"),
   approve: (id) => api.put(`/api/attendance/approve/${id}`),
   getInternshipAttendance: () => api.get("/api/attendance/internship-attendance"),
+  getAllAttendanceLogs: () => api.get("/api/attendance/all-logs"),
 };
 
 // NOC Requests
