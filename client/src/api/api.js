@@ -108,4 +108,9 @@ export const nocAPI = {
   reject: (id, remarks) => api.put(`/api/noc-requests/reject/${id}`, { remarks }),
 };
 
+// Analytics API
+export const analyticsAPI = {
+  getInternshipAnalytics: () => api.get("/api/internship-analytics"),
+};
+
 export default api;

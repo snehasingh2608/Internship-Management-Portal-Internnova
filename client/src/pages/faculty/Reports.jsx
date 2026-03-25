@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../layout/Navbar';
 import Sidebar from '../../layout/Sidebar';
-import api from '../../api/api';
+import { analyticsAPI } from '../../api/api';
 
 const Reports = () => {
     const [filterType, setFilterType] = useState('all');
@@ -14,8 +14,8 @@ const Reports = () => {
             setLoading(true);
             setError('');
             try {
-                const res = await api.get('/reports/internship-analytics');
-                setAnalytics(res.data);
+                const res = await analyticsAPI.getInternshipAnalytics();
+                setAnalytics(res.data.data);
             } catch (err) {
                 setError(err.response?.data?.message || 'Failed to load internship analytics');
             } finally {
@@ -26,43 +26,43 @@ const Reports = () => {
         fetchAnalytics();
     }, []);
 
-    const placementRate = analytics ? Math.round(analytics.placementRate || 0) : 0;
-    const totalRecords = analytics?.totalRecords || 0;
-    const placements = analytics?.placements || 0;
-    const internships = analytics?.internships || 0;
-    const internshipPPO = analytics?.internshipPPO || 0;
+    const totalStudents = analytics?.totalStudents || 0;
+    const totalInternships = analytics?.totalInternships || 0;
+    const approvedInternships = analytics?.approvedInternships || 0;
+    const pendingInternships = analytics?.pendingInternships || 0;
+    const monthlyTrends = analytics?.monthlyTrends || [];
     const lastUpdated = analytics ? new Date().toLocaleString() : '—';
 
     const stats = [
-        { label: 'Total Records', value: String(totalRecords), icon: '📄', color: 'bg-blue-50 text-blue-600' },
-        { label: 'Placements', value: String(placements + internshipPPO), icon: '🎓', color: 'bg-green-50 text-green-600' },
-        { label: 'Placement Rate', value: `${placementRate}%`, icon: '📊', color: 'bg-purple-50 text-purple-600' },
-        { label: 'Last Updated', value: lastUpdated, icon: '🕐', color: 'bg-orange-50 text-orange-600' },
+        { label: 'Total Students', value: String(totalStudents), icon: '👥', color: 'bg-blue-50 text-blue-600' },
+        { label: 'Total Internships', value: String(totalInternships), icon: '💼', color: 'bg-purple-50 text-purple-600' },
+        { label: 'Approved NOCs', value: String(approvedInternships), icon: '✅', color: 'bg-green-50 text-green-600' },
+        { label: 'Pending NOCs', value: String(pendingInternships), icon: '⏳', color: 'bg-orange-50 text-orange-600' },
     ];
 
     const reportCategories = analytics
         ? [
             {
                 id: 1,
-                title: 'Placement Statistics',
+                title: 'Internship Status',
                 type: 'Analytics',
                 date: `Updated: ${lastUpdated}`,
                 chartType: 'pie',
-                data: [placements, internships, internshipPPO],
-                labels: ['Placement', 'Internship', 'Internship + PPO'],
-                icon: '📈',
+                data: [approvedInternships, pendingInternships],
+                labels: ['Approved', 'Pending'],
+                icon: '📊',
                 color: 'from-green-500 to-green-600',
             },
             {
                 id: 2,
-                title: 'Internship to PPO Conversion',
+                title: 'Monthly Postings',
                 type: 'Analytics',
                 date: `Updated: ${lastUpdated}`,
-                chartType: 'pie',
-                data: [internshipPPO, Math.max(placements + internships, 0)],
-                labels: ['Internship + PPO', 'Other (Placement/Internship)'],
-                icon: '🎯',
-                color: 'from-pink-500 to-pink-600',
+                chartType: 'bar',
+                data: monthlyTrends.length ? monthlyTrends.map(t => t.count) : [0],
+                labels: monthlyTrends.length ? monthlyTrends.map(t => t.month) : ['N/A'],
+                icon: '📈',
+                color: 'from-indigo-500 to-indigo-600',
             },
         ]
         : [];
