@@ -23,8 +23,13 @@ const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
 
+
 app.use(cors({
-  origin: "https://internship-management-portal-intern.vercel.app"
+  origin: [
+    "http://localhost:3000",
+    "https://internship-management-portal-intern.vercel.app"
+  ],
+  credentials: true
 }));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
