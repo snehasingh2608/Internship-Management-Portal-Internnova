@@ -19,6 +19,7 @@ const applicationRoutes = require("./routes/applicationRoutes");
 const userRoutes = require("./routes/userRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const nocRequestRoutes = require("./routes/nocRequestRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/noc-requests", nocRequestRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api", analyticsRoutes);
 
 app.get("/", (req, res) => {
   res.send("Internnova Backend Running 🚀");
