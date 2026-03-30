@@ -12,7 +12,7 @@ import MyApplications from './pages/student/MyApplications';
 import FacultyDashboard from './pages/faculty/Dashboard';
 import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
 import AttendanceMonitoring from './pages/faculty/AttendanceMonitoring';
-import Reports from './pages/faculty/Reports';
+import Reports from './pages/faculty/ReportsDashboard';
 import AdminDashboard from './pages/admin/Dashboard';
 import UserManagement from './pages/admin/UserManagement';
 import ApproveInternships from './pages/admin/ApproveInternships';
