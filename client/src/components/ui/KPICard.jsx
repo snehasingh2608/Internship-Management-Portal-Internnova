@@ -1,6 +1,6 @@
 import React from 'react';
-import { TrendingUpIcon, TrendingDownIcon, MinusIcon } from '@heroicons/react/24/outline';
-
+//import { TrendingUpIcon, TrendingDownIcon, MinusIcon } from '@heroicons/react/24/outline';
+import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/outline';
 const KPICard = ({ 
   title, 
   value, 
@@ -46,11 +46,16 @@ const KPICard = ({
 
   const colors = colorSchemes[color] || colorSchemes.blue;
 
+  // const getTrendIcon = () => {
+  //   if (trendDirection === 'up') return <TrendingUpIcon className="w-4 h-4" />;
+  //   if (trendDirection === 'down') return <TrendingDownIcon className="w-4 h-4" />;
+  //   return <MinusIcon className="w-4 h-4" />;
+  // };
   const getTrendIcon = () => {
-    if (trendDirection === 'up') return <TrendingUpIcon className="w-4 h-4" />;
-    if (trendDirection === 'down') return <TrendingDownIcon className="w-4 h-4" />;
-    return <MinusIcon className="w-4 h-4" />;
-  };
+  if (trendDirection === 'up') return <ArrowTrendingUpIcon className="w-4 h-4" />;
+  if (trendDirection === 'down') return <ArrowTrendingDownIcon className="w-4 h-4" />;
+  return <span className="w-4 h-4">—</span>; // simple fallback instead of MinusIcon
+};
 
   const getTrendColor = () => {
     if (trendDirection === 'up') return 'text-green-600 bg-green-50';

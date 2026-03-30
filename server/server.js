@@ -24,10 +24,18 @@ const analyticsRoutes = require("./routes/analyticsRoutes");
 const app = express();
 
 
+// app.use(cors({
+//   origin: [
+//     "http://localhost:3000",
+//     "https://internship-management-portal-intern.vercel.app"
+//   ],
+//   credentials: true
+// }));
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://internship-management-portal-intern.vercel.app"
+    "http://localhost:3001",
+    "http://localhost:3002"
   ],
   credentials: true
 }));
