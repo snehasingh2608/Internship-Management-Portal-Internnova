@@ -13,12 +13,14 @@ import MyApplications from './pages/student/MyApplications';
 import FacultyDashboard from './pages/faculty/DashboardModern';
 //import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
 import AttendanceMonitoring from './pages/faculty/AttendanceMonitoring';
+import Students from './pages/faculty/Students';
 // import Reports from './pages/faculty/ReportsDashboard';
 import Reports from './pages/faculty/ReportsAnalytics';
 import AdminDashboard from './pages/admin/Dashboard';
 import UserManagement from './pages/admin/UserManagement';
 import ApproveInternships from './pages/admin/ApproveInternships';
-import NOCApproval from './pages/faculty/NOCApproval';
+// import NOCApproval from './pages/faculty/NOCApproval';
+import NOCApproval from './pages/faculty/NOCApprovalsFixed';
 import NOCApprovalAdmin from './pages/admin/NOCApprovalAdmin';
 import './App.css';
 
@@ -46,6 +48,7 @@ function App() {
           {/* <Route path="/faculty/dashboard" element={<ProtectedRoute allowedRoles={['faculty']}><FacultyDashboard /></ProtectedRoute>} />
           <Route path="/faculty/attendance" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceDashboard /></ProtectedRoute>} /> */}
           <Route path="/faculty/attendance-monitoring" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceMonitoring /></ProtectedRoute>} />
+          <Route path="/faculty/students" element={<ProtectedRoute allowedRoles={['faculty']}><Students /></ProtectedRoute>} />
           <Route path="/faculty/reports" element={<ProtectedRoute allowedRoles={['faculty']}><Reports /></ProtectedRoute>} />
           <Route path="/faculty/noc-approval" element={<ProtectedRoute allowedRoles={['faculty']}><NOCApproval /></ProtectedRoute>} />
           <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
