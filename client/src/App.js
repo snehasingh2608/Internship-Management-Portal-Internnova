@@ -9,9 +9,9 @@ import Internships from './pages/student/Internships';
 import Profile from './pages/student/Profile';
 import NOCRequest from './pages/student/NOCRequest';
 import MyApplications from './pages/student/MyApplications';
-// import FacultyDashboard from './pages/faculty/Dashboard';
+//  import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyDashboard from './pages/faculty/DashboardModern';
-import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
+//import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
 import AttendanceMonitoring from './pages/faculty/AttendanceMonitoring';
 // import Reports from './pages/faculty/ReportsDashboard';
 import Reports from './pages/faculty/ReportsAnalytics';
@@ -35,8 +35,16 @@ function App() {
           <Route path="/student/profile" element={<ProtectedRoute allowedRoles={['student']}><Profile /></ProtectedRoute>} />
           <Route path="/student/noc-request" element={<ProtectedRoute allowedRoles={['student']}><NOCRequest /></ProtectedRoute>} />
           <Route path="/student/applications" element={<ProtectedRoute allowedRoles={['student']}><MyApplications /></ProtectedRoute>} />
-          <Route path="/faculty/dashboard" element={<ProtectedRoute allowedRoles={['faculty']}><FacultyDashboard /></ProtectedRoute>} />
-          <Route path="/faculty/attendance" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceDashboard /></ProtectedRoute>} />
+          <Route 
+  path="/faculty/dashboard" 
+  element={
+    <ProtectedRoute allowedRoles={['faculty']}>
+      <FacultyDashboard />
+    </ProtectedRoute>
+  } 
+/>
+          {/* <Route path="/faculty/dashboard" element={<ProtectedRoute allowedRoles={['faculty']}><FacultyDashboard /></ProtectedRoute>} />
+          <Route path="/faculty/attendance" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceDashboard /></ProtectedRoute>} /> */}
           <Route path="/faculty/attendance-monitoring" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceMonitoring /></ProtectedRoute>} />
           <Route path="/faculty/reports" element={<ProtectedRoute allowedRoles={['faculty']}><Reports /></ProtectedRoute>} />
           <Route path="/faculty/noc-approval" element={<ProtectedRoute allowedRoles={['faculty']}><NOCApproval /></ProtectedRoute>} />
