@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../../layout/Navbar';
-import Sidebar from '../../layout/Sidebar';
+// import Navbar from '../../layout/Navbar';
+// import Sidebar from '../../layout/Sidebar';
 import { internshipAPI, applicationAPI } from '../../api/api';
 
 const Internships = () => {
@@ -51,10 +51,10 @@ const Internships = () => {
     const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : '-');
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
-            <div className="flex flex-1">
-                <Sidebar role="student" />
+        // <div className="min-h-screen bg-gray-50 flex flex-col">
+        //     <Navbar />
+        //     <div className="flex flex-1">
+        //         <Sidebar role="student" />
                 <main className="flex-1 p-6 md:p-8 overflow-y-auto">
                     <div className="max-w-7xl mx-auto">
                         <h1 className="text-2xl font-bold text-gray-900 mb-6">Available Internships</h1>
@@ -102,8 +102,8 @@ const Internships = () => {
                         )}
                     </div>
                 </main>
-            </div>
-        </div>
+        //     </div>
+        // </div>
     );
 };
 

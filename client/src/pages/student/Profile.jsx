@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../../layout/Navbar';
-import Sidebar from '../../layout/Sidebar';
-import { userAPI } from '../../api/api';
+// import Navbar from '../../layout/Navbar';
+// import Sidebar from '../../layout/Sidebar';
+// import { userAPI } from '../../api/api';
+import { userAPI } from "../../services/api";
+
 
 const Profile = () => {
     const [formData, setFormData] = useState({
@@ -62,11 +64,11 @@ const Profile = () => {
     if (loading) return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
-            <div className="flex flex-1">
-                <Sidebar role="student" />
-                <main className="flex-1 p-6 md:p-8 overflow-y-auto">
+        // <div className="min-h-screen bg-gray-50 flex flex-col">
+        //     <Navbar />
+        //     <div className="flex flex-1">
+        //         <Sidebar role="student" />
+        //         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
                     <div className="max-w-2xl mx-auto">
                         <h1 className="text-2xl font-bold text-gray-900 mb-6">Profile</h1>
                         <div className="bg-white shadow rounded-lg p-6">
@@ -146,9 +148,9 @@ const Profile = () => {
                             </form>
                         </div>
                     </div>
-                </main>
-            </div>
-        </div>
+        //         </main>
+        //     </div>
+        // </div>
     );
 };
 

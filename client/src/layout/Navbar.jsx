@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Logo from '../components/common/Logo';
+import { Link, useLocation } from 'react-router-dom';
+import { AcademicCapIcon } from '@heroicons/react/24/outline';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const location = useLocation();
+
+    const getPageTitle = () => {
+        if (location.pathname.includes("applications")) return "My Applications";
+        if (location.pathname.includes("dashboard")) return "Dashboard";
+        if (location.pathname.includes("internships")) return "Internships";
+        if (location.pathname.includes("profile")) return "Profile";
+        if (location.pathname.includes("noc-request")) return "Request NOC";
+        return "Dashboard";
+    };
 
     return (
         <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
@@ -11,7 +21,12 @@ const Navbar = () => {
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">
-                            <Logo size="medium" />
+                            <div className="flex items-center gap-2">
+                                <AcademicCapIcon className="h-6 w-6 text-gray-700" />
+                                <h1 className="text-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                    {getPageTitle()}
+                                </h1>
+                            </div>
                         </div>
                     </div>
                     <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">

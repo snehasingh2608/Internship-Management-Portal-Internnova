@@ -10,8 +10,31 @@ import {
   AcademicCapIcon
 } from '@heroicons/react/24/outline';
 
-const SidebarModern = ({ role }) => {
+const CommonSidebar = ({ role }) => {
   const location = useLocation();
+
+  const studentMenu = [
+    { 
+      name: 'Dashboard', 
+      path: '/student/dashboard', 
+      icon: <HomeIcon className="w-5 h-5" /> 
+    },
+    { 
+      name: 'Internships', 
+      path: '/student/internships', 
+      icon: <BriefcaseIcon className="w-5 h-5" /> 
+    },
+    { 
+      name: 'My Applications', 
+      path: '/student/applications', 
+      icon: <DocumentTextIcon className="w-5 h-5" /> 
+    },
+    { 
+      name: 'Profile', 
+      path: '/student/profile', 
+      icon: <UsersIcon className="w-5 h-5" /> 
+    },
+  ];
 
   const facultyMenu = [
     { 
@@ -30,7 +53,7 @@ const SidebarModern = ({ role }) => {
       icon: <BriefcaseIcon className="w-5 h-5" /> 
     },
     { 
-      name: 'NOC Approvals', 
+      name: 'NOC Approval', 
       path: '/faculty/noc-approvals', 
       icon: <DocumentTextIcon className="w-5 h-5" /> 
     },
@@ -43,29 +66,6 @@ const SidebarModern = ({ role }) => {
       name: 'Reports', 
       path: '/faculty/reports', 
       icon: <ChartBarIcon className="w-5 h-5" /> 
-    },
-  ];
-
-  const studentMenu = [
-    { 
-      name: 'Dashboard', 
-      path: '/student/dashboard', 
-      icon: <HomeIcon className="w-5 h-5" /> 
-    },
-    { 
-      name: 'Internships', 
-      path: '/student/internships', 
-      icon: <BriefcaseIcon className="w-5 h-5" /> 
-    },
-    { 
-      name: 'Profile', 
-      path: '/student/profile', 
-      icon: <UsersIcon className="w-5 h-5" /> 
-    },
-    { 
-      name: 'My Applications', 
-      path: '/student/applications', 
-      icon: <DocumentTextIcon className="w-5 h-5" /> 
     },
   ];
 
@@ -157,4 +157,4 @@ const SidebarModern = ({ role }) => {
   );
 };
 
-export default SidebarModern;
+export default CommonSidebar;
