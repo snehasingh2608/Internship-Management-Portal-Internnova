@@ -8,7 +8,8 @@ import StudentDashboard from './pages/student/Dashboard';
 import Internships from './pages/student/Internships';
 import Profile from './pages/student/Profile';
 import NOCRequest from './pages/student/NOCRequest';
-import MyApplications from './pages/student/MyApplications';
+import MyApplicationsComplete from './pages/student/MyApplicationsComplete';
+// import MyApplications from './pages/student/MyApplications';
 //  import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyDashboard from './pages/faculty/DashboardModern';
 //import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
@@ -36,7 +37,12 @@ function App() {
           <Route path="/student/internships" element={<ProtectedRoute allowedRoles={['student']}><Internships /></ProtectedRoute>} />
           <Route path="/student/profile" element={<ProtectedRoute allowedRoles={['student']}><Profile /></ProtectedRoute>} />
           <Route path="/student/noc-request" element={<ProtectedRoute allowedRoles={['student']}><NOCRequest /></ProtectedRoute>} />
-          <Route path="/student/applications" element={<ProtectedRoute allowedRoles={['student']}><MyApplications /></ProtectedRoute>} />
+          {/* <Route path="/student/applications" element={<ProtectedRoute allowedRoles={['student']}><MyApplications /></ProtectedRoute>} /> */}
+          <Route path="/student/applications" element={
+  <ProtectedRoute allowedRoles={['student']}>
+    <MyApplicationsComplete />
+  </ProtectedRoute>
+} />
           <Route 
   path="/faculty/dashboard" 
   element={

@@ -56,7 +56,7 @@ export const internshipAPI = {
 // Applications
 export const applicationAPI = {
   apply: (internshipId) => api.post("/api/applications", { internshipId }),
-  getMyApplications: () => api.get("/api/applications/my"),
+  getMyApplications: (studentId) => api.get(`/api/applications/student/${studentId}`),
   getByInternship: (internshipId) => api.get(`/api/applications/internship/${internshipId}`),
 };
 
@@ -96,6 +96,10 @@ export const attendanceAPI = {
   approve: (id) => api.put(`/api/attendance/approve/${id}`),
   getInternshipAttendance: () => api.get("/api/attendance/internship-attendance"),
   getAllAttendanceLogs: () => api.get("/api/attendance/all-logs"),
+  uploadAttendance: (formData) => api.post("/api/attendance/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  }),
+  getStudentAttendance: (studentId) => api.get(`/api/attendance/student/${studentId}`),
 };
 
 // NOC Requests
