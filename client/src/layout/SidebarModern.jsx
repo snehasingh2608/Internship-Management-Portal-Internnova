@@ -8,6 +8,7 @@ import {
   ClockIcon,
   ChartBarIcon
 } from '@heroicons/react/24/outline';
+import Logo from '../components/common/Logo';
 
 const SidebarModern = ({ role }) => {
   const location = useLocation();
@@ -105,12 +106,7 @@ const SidebarModern = ({ role }) => {
     <div className="flex flex-col w-64 bg-white shadow-xl border-r border-gray-200">
       {/* Logo Section */}
       <div className="flex items-center h-16 px-6 bg-gradient-to-r from-blue-600 to-purple-600 border-b border-gray-200">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <span className="text-blue-600 font-bold text-sm">IN</span>
-          </div>
-          <h1 className="text-xl font-bold text-white">InternNova</h1>
-        </div>
+        <Logo size="medium" clickable={false} className="text-white" />
       </div>
       
       {/* Navigation */}

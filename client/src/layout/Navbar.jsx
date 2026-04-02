@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../components/common/Logo';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,9 +11,7 @@ const Navbar = () => {
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">
-                            <Link to="/" className="text-2xl font-bold text-primary">
-                                InternNova
-                            </Link>
+                            <Logo size="medium" />
                         </div>
                     </div>
                     <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
