@@ -8,9 +8,7 @@ import StudentDashboard from './pages/student/Dashboard';
 import Internships from './pages/student/Internships';
 import Profile from './pages/student/Profile';
 import NOCRequest from './pages/student/NOCRequest';
-import MyApplicationsComplete from './pages/student/MyApplicationsComplete';
-import StudentLayout from './components/layout/StudentLayout';
-// import MyApplications from './pages/student/MyApplications';
+import MyApplications from './pages/student/MyApplications';
 //  import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyDashboard from './pages/faculty/DashboardModern';
 //import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
@@ -34,45 +32,11 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          <Route path="/student/dashboard" element={
-  <ProtectedRoute allowedRoles={['student']}>
-    <StudentLayout>
-      <StudentDashboard />
-    </StudentLayout>
-  </ProtectedRoute>
-} />
-<Route path="/student/internships" element={
-  <ProtectedRoute allowedRoles={['student']}>
-    <StudentLayout>
-      <Internships />
-    </StudentLayout>
-  </ProtectedRoute>
-} />
-
-<Route path="/student/profile" element={
-  <ProtectedRoute allowedRoles={['student']}>
-    <StudentLayout>
-      <Profile />
-    </StudentLayout>
-  </ProtectedRoute>
-} />
-
-<Route path="/student/noc-request" element={
-  <ProtectedRoute allowedRoles={['student']}>
-    <StudentLayout>
-      <NOCRequest />
-    </StudentLayout>
-  </ProtectedRoute>
-} />
-
-          <Route path="/student/applications" element={
-  <ProtectedRoute allowedRoles={['student']}>
-    <StudentLayout>
-      <MyApplicationsComplete />
-    </StudentLayout>
-  </ProtectedRoute>
-} />
+          <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>} />
+          <Route path="/student/internships" element={<ProtectedRoute allowedRoles={['student']}><Internships /></ProtectedRoute>} />
+          <Route path="/student/profile" element={<ProtectedRoute allowedRoles={['student']}><Profile /></ProtectedRoute>} />
+          <Route path="/student/noc-request" element={<ProtectedRoute allowedRoles={['student']}><NOCRequest /></ProtectedRoute>} />
+          <Route path="/student/applications" element={<ProtectedRoute allowedRoles={['student']}><MyApplications /></ProtectedRoute>} />
           <Route 
   path="/faculty/dashboard" 
   element={
