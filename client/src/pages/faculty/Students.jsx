@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Navbar from '../../layout/Navbar';
 import CommonSidebar from '../../layout/CommonSidebar';
-import { userAPI, internshipAPI } from '../../api/api';
+import api, { userAPI, internshipAPI, analyticsAPI } from '../../api/api';
 import {
   UserGroupIcon,
   UserIcon,
