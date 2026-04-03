@@ -52,6 +52,3 @@ A full-stack web application designed to streamline the internship process for *
 - Git & GitHub
 - VS Code
 
-
-
-## 📁 Project Structure
