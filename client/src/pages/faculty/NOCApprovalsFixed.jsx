@@ -30,7 +30,7 @@ const NOCApprovals = () => {
 
   const fetchNOCRequests = async () => {
     try {
-      const res = await nocAPI.getMyRequests();
+      const res = await nocAPI.getAll();
       setNOCRequests(res.data || []);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to load NOC requests');

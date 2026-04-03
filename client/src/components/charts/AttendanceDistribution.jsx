@@ -2,11 +2,20 @@ import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { UserGroupIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
-const AttendanceDistribution = ({ students = [], title = "Attendance Distribution" }) => {
+const AttendanceDistribution = ({ students = [], chartData, title = "Attendance Distribution" }) => {
   // Calculate attendance distribution
   const distributionData = useMemo(() => {
     if (!students || students.length === 0) {
       return [];
+    }
+
+    if (chartData) {
+      const total = (chartData.present || 0) + (chartData.partial || 0) + (chartData.absent || 0) || 1;
+      return [
+        { name: 'Present (Both Months)', value: chartData.present || 0, percentage: Math.round(((chartData.present||0)/total)*100), color: '#10B981' },
+        { name: 'Partial (One Month)', value: chartData.partial || 0, percentage: Math.round(((chartData.partial||0)/total)*100), color: '#F59E0B' },
+        { name: 'Absent (Neither)', value: chartData.absent || 0, percentage: Math.round(((chartData.absent||0)/total)*100), color: '#EF4444' }
+      ].filter(c => c.value > 0);
     }
 
     // Categorize students based on attendance percentage
@@ -37,7 +46,7 @@ const AttendanceDistribution = ({ students = [], title = "Attendance Distributio
         percentage: Math.round((category.count / students.length) * 100),
         color: category.color
       }));
-  }, [students]);
+  }, [students, chartData]);
 
   // Custom label for pie chart
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percentage }) => {

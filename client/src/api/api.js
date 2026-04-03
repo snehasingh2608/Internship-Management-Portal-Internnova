@@ -126,4 +126,9 @@ export const analyticsAPI = {
   getInternshipAnalytics: () => api.get("/api/internship-analytics"),
 };
 
+export const facultyAPI = {
+  getDashboardMetrics: () => api.get("/api/faculty/dashboard/metrics"),
+  getRecentActivity: () => api.get("/api/faculty/dashboard/recent-activity"),
+};
+
 export default api;

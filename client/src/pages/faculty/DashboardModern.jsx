@@ -6,7 +6,7 @@ import PendingActions from '../../components/ui/PendingActions';
 import ActiveListings from '../../components/ui/ActiveListings';
 import RecentActivity from '../../components/ui/RecentActivity';
 import QuickActions from '../../components/ui/QuickActions';
-import { internshipAPI, applicationAPI, nocAPI } from '../../api/api';
+import { internshipAPI, applicationAPI, nocAPI, facultyAPI } from '../../api/api';
 import { 
   BriefcaseIcon, 
   UsersIcon, 
@@ -36,39 +36,40 @@ const DashboardModern = () => {
     }
     
     fetchDashboardData();
+    
+    const interval = setInterval(() => {
+      fetchDashboardData();
+    }, 30000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const fetchDashboardData = async () => {
     try {
-      const [internshipsRes, applicationsRes, nocRes] = await Promise.all([
+      const [internshipsRes, nocRes, metricsRes, activityRes] = await Promise.all([
         internshipAPI.getMyListings(),
-        applicationAPI.getMyApplications(),
-        nocAPI.getPending()
+        nocAPI.getPending(),
+        facultyAPI.getDashboardMetrics(),
+        facultyAPI.getRecentActivity()
       ]);
 
       const internships = internshipsRes.data || [];
-      const applications = applicationsRes.data || [];
       const pendingNocs = nocRes.data || [];
+      const metrics = metricsRes.data || {};
+      const activity = activityRes.data || [];
 
       setStats({
-        activeInternships: internships.filter(i => i.status === 'active').length,
-        totalApplicants: applications.length,
-        pendingNOCs: pendingNocs.length,
-        approvedInternships: internships.filter(i => i.status === 'closed').length,
-        activeStudents: 156, // Mock data
+        activeInternships: metrics.activeInternships || 0,
+        totalApplicants: metrics.totalApplicants || 0,
+        pendingNOCs: metrics.pendingNOCs || 0,
+        approvedInternships: metrics.approvedInternships || 0,
+        activeStudents: metrics.activeStudents || 0,
       });
 
       setPendingNOCs(pendingNocs.slice(0, 5));
       setActiveListings(internships.filter(i => i.status === 'active'));
 
-      // Mock recent activity
-      setRecentActivity([
-        { type: 'approval', message: 'NOC approved for Jane Smith', time: '2 hours ago' },
-        { type: 'application', message: 'John Doe applied for Frontend Developer', time: '3 hours ago' },
-        { type: 'attendance', message: 'Attendance report submitted by Mike Johnson', time: '5 hours ago' },
-        { type: 'approval', message: 'NOC approved for Sarah Wilson', time: '6 hours ago' },
-        { type: 'application', message: 'New application from Alex Brown', time: '8 hours ago' },
-      ]);
+      setRecentActivity(activity);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {

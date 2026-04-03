@@ -50,7 +50,7 @@ function App() {
           <Route path="/faculty/attendance-monitoring" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceMonitoring /></ProtectedRoute>} />
           <Route path="/faculty/students" element={<ProtectedRoute allowedRoles={['faculty']}><Students /></ProtectedRoute>} />
           <Route path="/faculty/reports" element={<ProtectedRoute allowedRoles={['faculty']}><Reports /></ProtectedRoute>} />
-          <Route path="/faculty/noc-approval" element={<ProtectedRoute allowedRoles={['faculty']}><NOCApproval /></ProtectedRoute>} />
+          <Route path="/faculty/noc-approvals" element={<ProtectedRoute allowedRoles={['faculty']}><NOCApproval /></ProtectedRoute>} />
           <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin']}><UserManagement /></ProtectedRoute>} />
           <Route path="/admin/internships" element={<ProtectedRoute allowedRoles={['admin']}><ApproveInternships /></ProtectedRoute>} />

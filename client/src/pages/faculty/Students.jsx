@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Navbar from '../../layout/Navbar';
 import Sidebar from '../../layout/Sidebar';
-import { userAPI, internshipAPI } from '../../api/api';
+import api, { userAPI, internshipAPI, analyticsAPI } from '../../api/api';
 import {
   UserGroupIcon,
   UserIcon,
@@ -55,65 +55,106 @@ const Students = () => {
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
 
+  // Analytics State
+  const [stats, setStats] = useState({
+    totalStudents: 0,
+    activeInternships: 0,
+    completedInternships: 0,
+    lowAttendance: 0,
+    attendanceChart: { present: 0, partial: 0, absent: 0 },
+    internshipChart: { active: 0, completed: 0, inactive: 0 },
+  });
+
+  // Fetch analytics data
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await analyticsAPI.getInternshipAnalytics();
+        if (response.data.success) {
+          setStats(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching internship analytics:", error);
+      }
+    };
+    fetchAnalytics();
+  }, [retryCount]);
+
   // Fetch data on component mount
   useEffect(() => {
     fetchAllData();
   }, [retryCount]);
+
+  const formatStudentData = (records) => {
+    return records.map(record => {
+      const isJanY = record.attend_ance_jan === 'Y';
+      const isFebY = record.attend_ance_feb === 'Y';
+      let att = 0;
+      if (isJanY && isFebY) att = 100;
+      else if (isJanY || isFebY) att = 50;
+
+      return {
+        _id: String(record.roll_number || record._id),
+        name: record.student_name,
+        department: record.program || 'N/A',
+        email: 'student@internnova.com',
+        attendance: att,
+        internshipTitle: record.placement_internshi_p_ppo || 'Internship',
+        internshipStatus: record.noc === 'Y' ? 'active' : 'inactive',
+        nocStatus: record.noc === 'Y' ? 'approved' : 'pending',
+        internshipCompany: record.name_of_the_organization_from_where_internship_is_done || 'Company',
+        reportsSubmitted: record.noc === 'Y' ? 2 : 0,
+        lastActive: record.createdAt || new Date().toISOString()
+      };
+    });
+  };
 
   const fetchAllData = async () => {
     setLoading(true);
     setError('');
     
     try {
-      // Fetch all data in parallel
-      const [studentsRes, internshipsRes] = await Promise.all([
-        userAPI.getAll().catch(() => ({ data: [] })),
-        internshipAPI.getAll().catch(() => ({ data: [] }))
-      ]);
-
-      // Process students data - filter only students
-      const allUsers = studentsRes.data || [];
-      const studentsOnly = allUsers.filter(user => user.role === 'student');
+      const studentsRes = await api.get('/api/students').catch(() => ({ data: { success: false, data: [] } }));
+      const records = studentsRes.data?.data || [];
+      setStudents(formatStudentData(records));
       
-      // Enhance student data with additional information
-      const enhancedStudents = studentsOnly.map(student => ({
-        ...student,
-        attendance: Math.floor(Math.random() * 40) + 60, // Mock attendance data
-        internshipTitle: student.internship?.title || 'Not Assigned',
-        internshipStatus: student.internshipStatus || 'active',
-        reportsSubmitted: Math.floor(Math.random() * 5),
-        nocStatus: student.nocStatus || 'pending',
-        lastActive: student.lastActive || new Date().toISOString()
-      }));
-
-      setStudents(enhancedStudents);
-      
-      // Process internships
-      const internshipList = internshipsRes.data || [];
-      setInternships(internshipList);
-
+      const internshipsRes = await internshipAPI.getAll().catch(() => ({ data: [] }));
+      setInternships(internshipsRes.data || []);
     } catch (err) {
       console.error('Error fetching data:', err);
-      setError(err.response?.data?.message || 'Failed to load students data');
+      setError('Failed to load students data');
       setStudents([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // Search logic handler
+  useEffect(() => {
+    const handleSearch = async () => {
+      if (!searchQuery.trim()) {
+        fetchAllData();
+        return;
+      }
+      setLoading(true);
+      try {
+        const res = await api.get(`/api/students/search?query=${searchQuery}`);
+        if (res.data?.success) {
+          setStudents(formatStudentData(res.data.data));
+        }
+      } catch (error) {
+        console.error('Error searching:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const timer = setTimeout(handleSearch, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   // Filter and search logic
   const filterData = useCallback(() => {
     let filtered = [...students];
-
-    // Search by name or ID
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(student =>
-        student.name?.toLowerCase().includes(query) ||
-        student.email?.toLowerCase().includes(query) ||
-        student._id?.toLowerCase().includes(query)
-      );
-    }
 
     // Filter by internship
     if (selectedInternship !== 'all') {
@@ -188,10 +229,10 @@ const Students = () => {
 
   // Chart data
   const statusDistribution = useMemo(() => [
-    { name: 'Active', value: students.filter(s => s.internshipStatus === 'active').length, color: '#3B82F6' },
-    { name: 'Completed', value: students.filter(s => s.internshipStatus === 'completed').length, color: '#10B981' },
-    { name: 'Inactive', value: students.filter(s => s.internshipStatus === 'inactive').length, color: '#6B7280' }
-  ], [students]);
+    { name: 'Active', value: stats.internshipChart?.active || 0, color: '#3B82F6' },
+    { name: 'Completed', value: stats.internshipChart?.completed || 0, color: '#10B981' },
+    { name: 'Inactive', value: stats.internshipChart?.inactive || 0, color: '#6B7280' }
+  ], [stats]);
 
   // Status badge component
   const StatusBadge = ({ status, type = 'status' }) => {
@@ -328,7 +369,7 @@ const Students = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <KPICard
                 title="Total Students"
-                value={kpiData.totalStudents}
+                value={stats.totalStudents}
                 icon={UserGroupIcon}
                 color="bg-blue-50"
                 trend="up"
@@ -336,7 +377,7 @@ const Students = () => {
               />
               <KPICard
                 title="Active Students"
-                value={kpiData.activeStudents}
+                value={stats.activeInternships}
                 icon={UserIcon}
                 color="bg-green-50"
                 trend="up"
@@ -344,7 +385,7 @@ const Students = () => {
               />
               <KPICard
                 title="Low Attendance"
-                value={kpiData.lowAttendanceStudents}
+                value={stats.lowAttendance}
                 icon={ExclamationTriangleIcon}
                 color="bg-red-50"
                 trend="down"
@@ -352,7 +393,7 @@ const Students = () => {
               />
               <KPICard
                 title="Completed Internships"
-                value={kpiData.completedInternships}
+                value={stats.completedInternships}
                 icon={AcademicCapIcon}
                 color="bg-purple-50"
                 trend="up"
@@ -364,6 +405,7 @@ const Students = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               <AttendanceDistribution 
                 students={students}
+                chartData={stats.attendanceChart}
                 title="Attendance Distribution"
               />
 
