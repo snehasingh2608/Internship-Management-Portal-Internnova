@@ -19,11 +19,11 @@ const CommonSidebar = ({ role }) => {
       path: '/student/dashboard', 
       icon: <HomeIcon className="w-5 h-5" /> 
     },
-    { 
-      name: 'Internships', 
-      path: '/student/internships', 
-      icon: <BriefcaseIcon className="w-5 h-5" /> 
-    },
+    // { 
+    //   name: 'Internships', 
+    //   path: '/student/internships', 
+    //   icon: <BriefcaseIcon className="w-5 h-5" /> 
+    // },
     { 
       name: 'My Applications', 
       path: '/student/applications', 

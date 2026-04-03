@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '../../layout/Navbar';
-import Sidebar from '../../layout/Sidebar';
+import CommonSidebar from '../../layout/CommonSidebar';
 import { nocAPI } from '../../api/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -132,7 +132,7 @@ const NOCApprovals = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
       <div className="flex flex-1">
-        <Sidebar role="faculty" />
+        <CommonSidebar role="faculty" />
         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-6">

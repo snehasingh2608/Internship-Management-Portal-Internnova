@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Navbar from '../../layout/Navbar';
-import Sidebar from '../../layout/Sidebar';
+import CommonSidebar from '../../layout/CommonSidebar';
 import { attendanceAPI, internshipAPI, userAPI } from '../../api/api';
 import {
   UserGroupIcon,
@@ -290,9 +290,9 @@ const AttendanceMonitoring = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="flex flex-1">
-        <Sidebar role="faculty" />
+        <CommonSidebar role="faculty" />
         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
             {/* Header Section */}

@@ -12,6 +12,7 @@ import {
   DocumentIcon,
   CalendarIcon
 } from '@heroicons/react/24/outline';
+import StudentLayout from '../../layout/StudentLayout';
 
 const MyApplicationsComplete = () => {
   const [applications, setApplications] = useState([
@@ -263,6 +264,7 @@ const MyApplicationsComplete = () => {
   }
 
   return (
+    <StudentLayout>
     <div className="space-y-6">
       {/* Header */}
       <div className="mb-10">
@@ -509,6 +511,7 @@ const MyApplicationsComplete = () => {
         </div>
       )}
     </div>
+    </StudentLayout>
   );};
 
 export default MyApplicationsComplete;

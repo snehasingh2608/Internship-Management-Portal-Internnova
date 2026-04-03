@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../layout/Navbar';
-import Sidebar from '../../layout/Sidebar';
+import CommonSidebar from '../../layout/CommonSidebar';
 import KPICard from '../../components/ui/KPICard';
 import ChartCard from '../../components/ui/ChartCard';
 import FilterButton from '../../components/ui/FilterButton';
@@ -106,7 +106,7 @@ const ReportsAnalytics = () => {
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
         <div className="flex flex-1">
-          <Sidebar role="faculty" />
+          <CommonSidebar role="faculty" />
           <main className="flex-1 p-6 md:p-8 overflow-y-auto">
             <div className="max-w-7xl mx-auto">
               <LoadingSkeleton />
@@ -122,7 +122,7 @@ const ReportsAnalytics = () => {
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
         <div className="flex flex-1">
-          <Sidebar role="faculty" />
+          <CommonSidebar role="faculty" />
           <main className="flex-1 p-6 md:p-8 overflow-y-auto">
             <div className="max-w-7xl mx-auto">
               <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
@@ -149,9 +149,9 @@ const ReportsAnalytics = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="flex flex-1">
-        <Sidebar role="faculty" />
+        <CommonSidebar role="faculty" />
         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
