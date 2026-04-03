@@ -119,6 +119,7 @@ export const nocAPI = {
   facultyApprove: (id) => api.put(`/api/noc-requests/faculty-approve/${id}`),
   adminApprove: (id) => api.put(`/api/noc-requests/admin-approve/${id}`),
   reject: (id, remarks) => api.put(`/api/noc-requests/reject/${id}`, { remarks }),
+  updateStatus: (id, status, remarks) => api.patch(`/api/noc-requests/${id}/status`, { status, remarks }),
 };
 
 // Analytics API

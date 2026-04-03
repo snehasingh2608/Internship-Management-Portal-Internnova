@@ -9,6 +9,7 @@ const {
   facultyApprove,
   reject,
   getAll,
+  updateStatus,
 } = require("../controllers/nocRequestController");
 const { protect, adminOnly, facultyOnly, studentOnly } = require("../middleware/authMiddleware");
 
@@ -22,5 +23,6 @@ router.put("/reject/:id", protect, reject); // Allow both admin and faculty to r
 // Keep the old ones just in case the frontend relies on them elsewhere temporarily
 router.put("/:id/approve", protect, facultyOnly, approve);
 router.put("/:id/reject", protect, facultyOnly, reject);
+router.patch("/:id/status", protect, facultyOnly, updateStatus);
 
 module.exports = router;

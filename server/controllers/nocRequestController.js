@@ -156,3 +156,54 @@ exports.reject = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.updateStatus = async (req, res) => {
+  try {
+    const { status, remarks } = req.body;
+    
+    if (!["approved", "rejected", "pending"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+
+    const noc = await NOCRequest.findByIdAndUpdate(
+      req.params.id,
+      {
+        approvalStatus: status,
+        approvedBy: req.user._id,
+        approvedAt: new Date(),
+        remarks: remarks || "",
+      },
+      { new: true }
+    ).populate("studentId", "name email department year");
+
+    if (!noc) {
+      return res.status(404).json({ message: "NOC Request not found" });
+    }
+
+    if (status === "approved") {
+      const student = noc.studentId;
+      await InternshipRecord.findOneAndUpdate(
+        {
+          student: student._id,
+          name_of_the_organization_from_where_internship_is_done: noc.companyName,
+        },
+        {
+          student: student._id,
+          student_name: student.name,
+          roll_number: noc.rollNumber || "",
+          program: student.department || "",
+          semester: student.year || "",
+          name_of_the_organization_from_where_internship_is_done: noc.companyName,
+          internship_duration: noc.duration,
+          placement_internshi_p_ppo: "Internship",
+          noc: "Y",
+        },
+        { upsert: true, new: true }
+      );
+    }
+
+    res.json(noc);
+  } catch (err) {
+    res.status(500).json({ message: "Server error updating NOC status" });
+  }
+};

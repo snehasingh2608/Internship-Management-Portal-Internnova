@@ -50,7 +50,7 @@ const NOCApprovals = () => {
     }
 
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(req => req.status === statusFilter);
+      filtered = filtered.filter(req => (req.approvalStatus || req.status || 'pending') === statusFilter);
     }
 
     setFilteredRequests(filtered);
@@ -67,13 +67,14 @@ const NOCApprovals = () => {
   const handleNOCAction = async (nocId, action) => {
     try {
       if (action === 'approve') {
-        await nocAPI.approve(nocId);
+        await nocAPI.updateStatus(nocId, 'approved', 'Approved by faculty');
       } else {
-        await nocAPI.reject(nocId, { remarks: 'Rejected by faculty' });
+        await nocAPI.updateStatus(nocId, 'rejected', 'Rejected by faculty');
       }
       fetchNOCRequests();
     } catch (error) {
       console.error('Error handling NOC action:', error);
+      setError(error.response?.data?.message || 'Error updating NOC status');
     }
   };
 
@@ -91,11 +92,11 @@ const NOCApprovals = () => {
       <Badge 
         key={req._id} 
         variant={
-          req.status === 'approved' ? 'success' :
-          req.status === 'rejected' ? 'danger' : 'warning'
+          (req.approvalStatus || req.status) === 'approved' ? 'success' :
+          (req.approvalStatus || req.status) === 'rejected' ? 'danger' : 'warning'
         }
       >
-        {req.status || 'Pending'}
+        {req.approvalStatus || req.status || 'Pending'}
       </Badge>,
       <div key={req._id} className="flex space-x-2">
         <Button
@@ -106,7 +107,7 @@ const NOCApprovals = () => {
           <EyeIcon className="mr-1" />
           View
         </Button>
-        {req.status === 'pending' && (
+        {(req.approvalStatus === 'pending' || req.status === 'pending' || (!req.approvalStatus && !req.status)) && (
           <>
             <Button
               variant="success"
@@ -211,20 +212,30 @@ const NOCApprovals = () => {
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-medium text-gray-900 mb-2">Offer Letter</h4>
-              {selectedNOC.offerLetter ? (
+              <h4 className="font-medium text-gray-900 mb-2">Offer Letter / Document</h4>
+              {(selectedNOC.offerLetterUrl || selectedNOC.documentUrl) ? (
                 <div className="text-center">
                   <div className="bg-gray-200 rounded-lg p-8 mb-4">
                     <DocumentIcon className="mx-auto h-12 w-12 text-gray-400" />
-                    <p className="text-gray-600 mt-2">Offer Letter Available</p>
+                    <p className="text-gray-600 mt-2">Document Available</p>
                   </div>
-                  <Button variant="primary">
+                  <Button 
+                    variant="primary"
+                    onClick={() => {
+                      let url = selectedNOC.documentUrl || selectedNOC.offerLetterUrl;
+                      if (!url.startsWith('http')) {
+                        const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+                        url = `${API_BASE}${url.startsWith('/') ? '' : '/'}${url}`;
+                      }
+                      window.open(url, "_blank");
+                    }}
+                  >
                     <DownloadIcon className="mr-2" />
-                    Download Offer Letter
+                    View / Download Document
                   </Button>
                 </div>
               ) : (
-                <p className="text-gray-500 text-center">No offer letter uploaded</p>
+                <p className="text-gray-500 text-center">No document uploaded</p>
               )}
             </div>
             

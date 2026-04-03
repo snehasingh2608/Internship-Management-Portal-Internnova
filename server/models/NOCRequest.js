@@ -21,6 +21,7 @@ const nocRequestSchema = new mongoose.Schema(
     hrEmail: { type: String, default: "" },
     hrPhone: { type: String, default: "" },
     offerLetterUrl: { type: String, default: "" },
+    documentUrl: { type: String, default: "" },
     approvalStatus: {
       type: String,
       enum: ["pending", "faculty_approved", "approved", "rejected"],
