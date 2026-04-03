@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../../layout/Navbar';
-import Sidebar from '../../layout/Sidebar';
-import { userAPI } from '../../api/api';
+// import Navbar from '../../layout/Navbar';
+// import Sidebar from '../../layout/Sidebar';
+// import { userAPI } from '../../api/api';
+import { userAPI } from "../../services/api";
+import StudentLayout from '../../layout/StudentLayout';
+
 
 const Profile = () => {
     const [formData, setFormData] = useState({
@@ -15,26 +18,37 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
+    // useEffect(() => {
+    //     const fetch = async () => {
+    //         try {
+    //             const res = await userAPI.getProfile();
+    //             const u = res.data;
+    //             setFormData({
+    //                 name: u.name || '',
+    //                 email: u.email || '',
+    //                 department: u.department || '',
+    //                 year: u.year || '',
+    //                 skills: Array.isArray(u.skills) ? u.skills.join(', ') : u.skills || '',
+    //             });
+    //         } catch (err) {
+    //             console.error(err);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //     fetch();
+    // }, []);
+
     useEffect(() => {
-        const fetch = async () => {
-            try {
-                const res = await userAPI.getProfile();
-                const u = res.data;
-                setFormData({
-                    name: u.name || '',
-                    email: u.email || '',
-                    department: u.department || '',
-                    year: u.year || '',
-                    skills: Array.isArray(u.skills) ? u.skills.join(', ') : u.skills || '',
-                });
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetch();
-    }, []);
+  setFormData({
+    name: "Test User",
+    email: "test@gmail.com",
+    department: "CSE",
+    year: "3rd Year",
+    skills: "React, Node"
+  });
+  setLoading(false);
+}, []);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -62,11 +76,13 @@ const Profile = () => {
     if (loading) return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-            <Navbar />
-            <div className="flex flex-1">
-                <Sidebar role="student" />
-                <main className="flex-1 p-6 md:p-8 overflow-y-auto">
+        // <div className="min-h-screen bg-gray-50 flex flex-col">
+        //     <Navbar />
+        //     <div className="flex flex-1">
+        //         <Sidebar role="student" />
+        //         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
+        <StudentLayout>
+        
                     <div className="max-w-2xl mx-auto">
                         <h1 className="text-2xl font-bold text-gray-900 mb-6">Profile</h1>
                         <div className="bg-white shadow rounded-lg p-6">
@@ -146,9 +162,11 @@ const Profile = () => {
                             </form>
                         </div>
                     </div>
-                </main>
-            </div>
-        </div>
+                    </StudentLayout>
+        //         </main>
+
+        //     </div>
+        // </div>
     );
 };
 

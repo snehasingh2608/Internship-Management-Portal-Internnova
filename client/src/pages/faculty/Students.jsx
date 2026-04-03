@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Navbar from '../../layout/Navbar';
-import Sidebar from '../../layout/Sidebar';
-import api, { userAPI, internshipAPI, analyticsAPI } from '../../api/api';
+import CommonSidebar from '../../layout/CommonSidebar';
+import { userAPI, internshipAPI } from '../../api/api';
 import {
   UserGroupIcon,
   UserIcon,
@@ -354,9 +354,9 @@ const Students = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="flex flex-1">
-        <Sidebar role="faculty" />
+        <CommonSidebar role="faculty" />
         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
             {/* Header Section */}

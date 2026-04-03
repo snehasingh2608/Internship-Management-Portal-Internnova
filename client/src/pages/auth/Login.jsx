@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import campusBg from '../../assets/campus.png';
+import Logo from '../../components/common/Logo';
 
 
 const Login = () => {
@@ -53,10 +54,9 @@ const Login = () => {
                         <div className="text-center mb-10">
                             <div className="mb-6 flex justify-center">
                                 <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-4 shadow-lg shadow-purple-500/30 transform transition-transform hover:scale-110 hover:rotate-3 duration-300">
-                                    <span className="text-4xl block leading-none">🎓</span>
+                                    <Logo size="large" clickable={false} />
                                 </div>
                             </div>
-                            <h1 className="text-3xl font-extrabold text-white tracking-tight mb-2">InternNova</h1>
                             <p className="text-blue-100/80 font-medium">Welcome back! Please sign in.</p>
                         </div>
 

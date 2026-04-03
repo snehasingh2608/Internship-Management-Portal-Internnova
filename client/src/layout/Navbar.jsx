@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { AcademicCapIcon } from '@heroicons/react/24/outline';
+
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const location = useLocation();
+
+    const getPageTitle = () => {
+        if (location.pathname.includes("applications")) return "My Applications";
+        if (location.pathname.includes("dashboard")) return "Dashboard";
+        if (location.pathname.includes("internships")) return "Internships";
+        if (location.pathname.includes("profile")) return "Profile";
+        if (location.pathname.includes("noc-request")) return "Request NOC";
+        return "Dashboard";
+    };
 
     return (
         <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
@@ -10,18 +22,21 @@ const Navbar = () => {
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">
-                            <Link to="/" className="text-2xl font-bold text-primary">
-                                InternNova
-                            </Link>
+                            <div className="flex items-center gap-2">
+                                <AcademicCapIcon className="h-6 w-6 text-gray-700" />
+                                <h1 className="text-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                    {getPageTitle()}
+                                </h1>
+                            </div>
                         </div>
                     </div>
                     <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
                         <Link to="/" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
                             Home
                         </Link>
-                        <Link to="/student/internships" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
-                            Internships
-                        </Link>
+                        {/* <Link to="/student/internships" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"> */}
+                            {/* Internships
+                        </Link> */}
                         <Link to="/login" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
                             Login
                         </Link>
@@ -55,9 +70,9 @@ const Navbar = () => {
                         <Link to="/" className="block pl-3 pr-4 py-2 border-l-4 border-primary text-base font-medium text-primary bg-indigo-50">
                             Home
                         </Link>
-                        <Link to="/student/internships" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
+                        {/* <Link to="/student/internships" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
                             Internships
-                        </Link>
+                        </Link> */}
                         <Link to="/login" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
                             Login
                         </Link>
