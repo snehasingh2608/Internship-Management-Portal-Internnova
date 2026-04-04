@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import Navbar from '../../layout/Navbar';
 import CommonSidebar from '../../layout/CommonSidebar';
-import api, { userAPI, internshipAPI, analyticsAPI } from '../../api/api';
+import api, { internshipAPI, analyticsAPI } from '../../api/api';
 import {
   UserGroupIcon,
   UserIcon,
@@ -353,11 +352,9 @@ const Students = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* <Navbar /> */}
-      <div className="flex flex-1">
-        <CommonSidebar role="faculty" />
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto">
+    <div className="min-h-screen bg-gray-50 flex">
+      <CommonSidebar role="faculty" />
+      <main className="flex-1 p-6 md:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
             {/* Header Section */}
             <div className="mb-8">
@@ -888,7 +885,6 @@ const Students = () => {
             )}
           </div>
         </main>
-      </div>
     </div>
   );
 };

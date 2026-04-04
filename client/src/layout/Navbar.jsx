@@ -1,48 +1,29 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { AcademicCapIcon } from '@heroicons/react/24/outline';
-
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const location = useLocation();
+    const navigate = useNavigate();
+    const { logout } = useAuth();
 
-    const getPageTitle = () => {
-        if (location.pathname.includes("applications")) return "My Applications";
-        if (location.pathname.includes("dashboard")) return "Dashboard";
-        if (location.pathname.includes("internships")) return "Internships";
-        if (location.pathname.includes("profile")) return "Profile";
-        if (location.pathname.includes("noc-request")) return "Request NOC";
-        return "Dashboard";
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
     };
 
     return (
         <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                    <div className="flex">
-                        <div className="flex-shrink-0 flex items-center">
-                            <div className="flex items-center gap-2">
-                                <AcademicCapIcon className="h-6 w-6 text-gray-700" />
-                                <h1 className="text-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                    {getPageTitle()}
-                                </h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
-                        <Link to="/" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
-                            Home
-                        </Link>
-                        {/* <Link to="/student/internships" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"> */}
-                            {/* Internships
-                        </Link> */}
-                        <Link to="/login" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
-                            Login
-                        </Link>
-                        <Link to="/register" className="bg-primary text-white hover:bg-indigo-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm hover:shadow-md">
-                            Get Started
-                        </Link>
+                <div className="flex justify-end h-16">
+                    <div className="hidden sm:flex sm:items-center sm:space-x-8">
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                        >
+                            Logout
+                        </button>
                     </div>
                     <div className="-mr-2 flex items-center sm:hidden">
                         <button
@@ -67,18 +48,13 @@ const Navbar = () => {
             {isOpen && (
                 <div className="sm:hidden">
                     <div className="pt-2 pb-3 space-y-1">
-                        <Link to="/" className="block pl-3 pr-4 py-2 border-l-4 border-primary text-base font-medium text-primary bg-indigo-50">
-                            Home
-                        </Link>
-                        {/* <Link to="/student/internships" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
-                            Internships
-                        </Link> */}
-                        <Link to="/login" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
-                            Login
-                        </Link>
-                        <Link to="/register" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
-                            Register
-                        </Link>
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="w-full text-left block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300"
+                        >
+                            Logout
+                        </button>
                     </div>
                 </div>
             )}

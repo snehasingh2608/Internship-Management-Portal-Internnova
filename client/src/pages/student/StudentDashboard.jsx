@@ -9,7 +9,7 @@ const StudentDashboard = () => {
             <div>
                 <Greeting />
 
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     <div>
                         <h2 className="text-xl font-semibold text-gray-800">
                             Dashboard Overview
@@ -19,12 +19,14 @@ const StudentDashboard = () => {
                         </p>
                     </div>
 
-                    <Link
-                        to="/student/noc-request"
-                        className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors duration-200"
-                    >
-                        + Request NOC
-                    </Link>
+                    <div className="flex items-center gap-3">
+                        <Link
+                            to="/student/noc-request"
+                            className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors duration-200"
+                        >
+                            + Request NOC
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Recent Applications */}

@@ -1,9 +1,5 @@
 import React from "react";
-// import Sidebar from "./SidebarNew";   // use your SidebarNew
-import Navbar from "./Navbar";
 import CommonSidebar from "./CommonSidebar";
-
-
 
 const StudentLayout = ({ children }) => {
   return (
@@ -13,16 +9,11 @@ const StudentLayout = ({ children }) => {
       <CommonSidebar role="student" />
 
       {/* Main Section */}
-      <div className="flex-1 flex flex-col">
-
-        {/* Header */}
-        <Navbar />
-
+      <div className="flex-1 overflow-y-auto">
         {/* Page Content */}
-        <div className="p-6 overflow-y-auto">
+        <div className="p-6">
           {children}
         </div>
-
       </div>
     </div>
   );

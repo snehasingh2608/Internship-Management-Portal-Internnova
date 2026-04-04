@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Navbar from '../../layout/Navbar';
-import CommonSidebar from '../../layout/CommonSidebar';
+import FacultyLayout from '../../components/layout/FacultyLayout';
 import { nocAPI } from '../../api/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
@@ -130,46 +129,40 @@ const NOCApprovals = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
-      <div className="flex flex-1">
-        <CommonSidebar role="faculty" />
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold text-gray-900">NOC Approvals</h1>
+    <FacultyLayout>
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">NOC Approvals</h1>
+        </div>
+
+        {/* Filters */}
+        <Card className="mb-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <SearchBar
+                placeholder="Search by student name or company..."
+                onSearch={setSearchTerm}
+              />
             </div>
-
-            {/* Filters */}
-            <Card className="mb-6">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1">
-                  <SearchBar
-                    placeholder="Search by student name or company..."
-                    onSearch={setSearchTerm}
-                  />
-                </div>
-                <FilterDropdown
-                  options={statusOptions}
-                  selectedValue={statusFilter}
-                  onChange={setStatusFilter}
-                  placeholder="Filter by status"
-                  className="w-full sm:w-48"
-                />
-              </div>
-            </Card>
-
-            {/* Table */}
-            <Table
-              headers={['Student Name', 'Company', 'Stipend', 'Applied Date', 'Status', 'Actions']}
-              data={getTableData()}
-              loading={loading}
-              error={error}
-              emptyMessage="No NOC requests found"
-              onRetry={fetchNOCRequests}
+            <FilterDropdown
+              options={statusOptions}
+              selectedValue={statusFilter}
+              onChange={setStatusFilter}
+              placeholder="Filter by status"
+              className="w-full sm:w-48"
             />
           </div>
-        </main>
+        </Card>
+
+        {/* Table */}
+        <Table
+          headers={['Student Name', 'Company', 'Stipend', 'Applied Date', 'Status', 'Actions']}
+          data={getTableData()}
+          loading={loading}
+          error={error}
+          emptyMessage="No NOC requests found"
+          onRetry={fetchNOCRequests}
+        />
       </div>
 
       {/* Offer Letter Modal */}
@@ -210,7 +203,7 @@ const NOCApprovals = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-gray-50 p-4 rounded-lg">
               <h4 className="font-medium text-gray-900 mb-2">Offer Letter / Document</h4>
               {(selectedNOC.offerLetterUrl || selectedNOC.documentUrl) ? (
@@ -219,7 +212,7 @@ const NOCApprovals = () => {
                     <DocumentIcon className="mx-auto h-12 w-12 text-gray-400" />
                     <p className="text-gray-600 mt-2">Document Available</p>
                   </div>
-                  <Button 
+                  <Button
                     variant="primary"
                     onClick={() => {
                       let url = selectedNOC.documentUrl || selectedNOC.offerLetterUrl;
@@ -238,7 +231,7 @@ const NOCApprovals = () => {
                 <p className="text-gray-500 text-center">No document uploaded</p>
               )}
             </div>
-            
+
             <div className="flex justify-end space-x-3">
               <Button variant="outline" onClick={() => setShowModal(false)}>
                 Close
@@ -247,7 +240,7 @@ const NOCApprovals = () => {
           </div>
         )}
       </Modal>
-    </div>
+    </FacultyLayout>
   );
 };
 

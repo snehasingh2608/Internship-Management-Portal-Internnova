@@ -119,6 +119,13 @@ const DashboardModern = () => {
 
   return (
     <FacultyLayout>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">Faculty Dashboard</h2>
+          <p className="text-gray-600 mt-1">Manage internships, NOC requests, reports, and student engagement.</p>
+        </div>
+      </div>
+
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <KPICard
