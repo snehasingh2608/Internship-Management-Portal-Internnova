@@ -12,14 +12,18 @@ import {
   CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 
+import { useAuth } from '../../context/AuthContext';
+
 const ApplyNOC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [formData, setFormData] = useState({
     // Student Details
-    name: 'Alex Johnson',
-    rollNumber: 'CS2021001',
-    branch: 'Computer Science',
-    semester: '6th Semester',
+    name: user?.name || '',
+    rollNumber: user?.rollNumber || '',
+    branch: user?.department || '',
+    semester: user?.year ? `${user?.year} Year` : '',
     
     // Internship Details
     companyName: '',

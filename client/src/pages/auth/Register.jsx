@@ -32,7 +32,6 @@ const Register = () => {
                 else if (user.role === 'faculty') navigate('/faculty/dashboard');
                 else if (user.role === 'admin') navigate('/admin/dashboard');
                 else navigate('/');
-                window.location.reload();
             } else {
                 navigate('/login');
             }
