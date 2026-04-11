@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import StudentLayout from '../../layout/StudentLayout';
+import { nocAPI, handleAPIError, STUDENT_ID } from '../../api';
 import { 
   ArrowLeftIcon,
   DocumentArrowUpIcon,
@@ -45,40 +46,62 @@ const ApplyNOC = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Log form data to console (for now)
-    console.log('NOC Application Submitted:', {
-      ...formData,
-      status: 'Pending CDC Verification',
-      submittedAt: new Date().toISOString()
-    });
-
-    // Show success toast
-    toast.success('NOC submitted successfully. Awaiting approval', {
-      duration: 4000,
-    });
-
-    // Simulate status update after 3 seconds (dummy logic)
-    setTimeout(() => {
-      const randomStatus = Math.random() > 0.3 ? 'approved' : 'rejected';
+    try {
+      // Create FormData for file uploads
+      const apiFormData = new FormData();
+      apiFormData.append('studentId', STUDENT_ID);
+      apiFormData.append('companyName', formData.companyName);
+      apiFormData.append('role', formData.role);
+      apiFormData.append('startDate', formData.startDate);
+      apiFormData.append('duration', formData.duration);
+      apiFormData.append('stipend', formData.stipend);
+      apiFormData.append('remarks', formData.remarks);
       
-      if (randomStatus === 'approved') {
-        toast.success('NOC Approved! You can now download your certificate.  \ud83c\udf89', {
-          duration: 5000,
-        });
-      } else {
-        toast.error('NOC Rejected. Please check your application and reapply.', {
-          duration: 5000,
-        });
+      // Add files if they exist
+      if (formData.offerLetter) {
+        apiFormData.append('offerLetter', formData.offerLetter);
       }
-    }, 3000);
+      if (formData.studentId) {
+        apiFormData.append('studentIdCard', formData.studentId);
+      }
+      if (formData.deanApproval) {
+        apiFormData.append('deanApproval', formData.deanApproval);
+      }
 
-    // Reset form and navigate back after delay
-    setTimeout(() => {
-      navigate('/student/dashboard');
-    }, 6000);
+      // Show loading toast
+      const loadingToast = toast.loading('Submitting NOC application...');
+
+      // Send to backend
+      const response = await nocAPI.submitNOC(apiFormData);
+      
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+      
+      // Show success toast
+      toast.success('NOC submitted successfully. Awaiting approval', {
+        duration: 4000,
+      });
+
+      // Log response
+      console.log('NOC Application Response:', response.data);
+
+      // Navigate back to dashboard after delay
+      setTimeout(() => {
+        navigate('/student/dashboard');
+      }, 2000);
+
+    } catch (error) {
+      console.error('NOC Submission Error:', error);
+      
+      // Show error toast
+      const errorMessage = handleAPIError(error);
+      toast.error(errorMessage || 'Failed to submit NOC application', {
+        duration: 5000,
+      });
+    }
   };
 
   return (

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StudentLayout from '../../layout/StudentLayout';
+import { feedbackAPI, handleAPIError, STUDENT_ID } from '../../api';
 import { 
   ArrowLeftIcon,
   UserIcon,
@@ -13,7 +14,7 @@ import {
 const Feedback = () => {
   const navigate = useNavigate();
   
-  const [feedbackData] = useState([
+  const [feedbackData, setFeedbackData] = useState([
     {
       id: 1,
       facultyName: 'Dr. Sarah Johnson',
@@ -65,6 +66,27 @@ const Feedback = () => {
       category: 'Onboarding'
     }
   ]);
+
+  // Fetch feedback data from backend
+  const fetchFeedbackData = async () => {
+    try {
+      const response = await feedbackAPI.getStudentFeedback(STUDENT_ID);
+      
+      if (response.data) {
+        setFeedbackData(response.data);
+      }
+      
+      console.log('Feedback Data:', response.data);
+    } catch (error) {
+      console.error('Error fetching feedback data:', error);
+      // Keep using default data if API fails
+    }
+  };
+
+  // Fetch feedback on component mount
+  useEffect(() => {
+    fetchFeedbackData();
+  }, []);
 
   const getCategoryColor = (category) => {
     switch (category) {

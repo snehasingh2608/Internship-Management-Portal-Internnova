@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StudentLayout from '../../layout/StudentLayout';
+import { reportAPI, handleAPIError, STUDENT_ID } from '../../api';
 import { 
   ArrowLeftIcon,
   DocumentArrowUpIcon,
@@ -49,40 +50,82 @@ const SubmitReport = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Log report data to console (for now)
-    console.log('Report Submitted:', {
-      ...formData,
-      submittedAt: new Date().toISOString(),
-      status: 'Submitted'
-    });
+    try {
+      // Create FormData for file upload
+      const apiFormData = new FormData();
+      apiFormData.append('studentId', STUDENT_ID);
+      apiFormData.append('title', formData.reportTitle);
+      apiFormData.append('description', formData.description);
+      
+      // Add report file if exists
+      if (formData.reportFile) {
+        apiFormData.append('file', formData.reportFile);
+      }
 
-    // Add to submitted reports
-    const newReport = {
-      id: submittedReports.length + 1,
-      title: formData.reportTitle,
-      description: formData.description,
-      submittedDate: new Date().toISOString().split('T')[0],
-      status: 'Submitted'
-    };
-    
-    setSubmittedReports(prev => [newReport, ...prev]);
-    
-    // Show success message
-    setShowSuccess(true);
-    
-    // Reset form
-    setFormData({
-      reportTitle: '',
-      description: '',
-      reportFile: null
-    });
-    
-    // Hide success message after 3 seconds
-    setTimeout(() => setShowSuccess(false), 3000);
+      // Send to backend
+      const response = await reportAPI.submitReport(apiFormData);
+      
+      // Show success message
+      setShowSuccess(true);
+      
+      // Log response
+      console.log('Report Submission Response:', response.data);
+
+      // Add to submitted reports
+      const newReport = {
+        id: submittedReports.length + 1,
+        title: formData.reportTitle,
+        description: formData.description,
+        submittedDate: new Date().toISOString().split('T')[0],
+        status: 'Submitted'
+      };
+      
+      setSubmittedReports(prev => [newReport, ...prev]);
+      
+      // Reset form
+      setFormData({
+        reportTitle: '',
+        description: '',
+        reportFile: null
+      });
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => setShowSuccess(false), 3000);
+      
+      // Refresh reports list
+      fetchSubmittedReports();
+
+    } catch (error) {
+      console.error('Report Submission Error:', error);
+      
+      // Show error message (you could use toast here too)
+      alert(handleAPIError(error) || 'Failed to submit report. Please try again.');
+    }
   };
+
+  // Fetch submitted reports from backend
+  const fetchSubmittedReports = async () => {
+    try {
+      const response = await reportAPI.getStudentReports(STUDENT_ID);
+      
+      if (response.data) {
+        setSubmittedReports(response.data);
+      }
+      
+      console.log('Submitted Reports:', response.data);
+    } catch (error) {
+      console.error('Error fetching submitted reports:', error);
+      // Keep using default data if API fails
+    }
+  };
+
+  // Fetch reports on component mount
+  useEffect(() => {
+    fetchSubmittedReports();
+  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
