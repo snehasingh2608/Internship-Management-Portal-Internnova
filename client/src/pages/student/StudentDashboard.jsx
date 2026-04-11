@@ -1,78 +1,164 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Greeting from '../../components/Greeting';
 import StudentLayout from '../../layout/StudentLayout';
 
+import InternshipStatusCard from '../../components/dashboard/InternshipStatusCard';
+import NOCStatusTracker from '../../components/dashboard/NOCStatusTracker';
+import AttendanceTracker from '../../components/dashboard/AttendanceTracker';
+import AlertsNotifications from '../../components/dashboard/AlertsNotifications';
+import RecentActivity from '../../components/dashboard/RecentActivity';
+import QuickActions from '../../components/dashboard/QuickActions';
+import { 
+  AcademicCapIcon,
+  CalendarIcon
+} from '@heroicons/react/24/outline';
+
 const StudentDashboard = () => {
-    return (
-        <StudentLayout>
-            <div>
-                <Greeting />
+  // University internship data
+  const userName = 'Alex Johnson';
+  
+  const [alerts, setAlerts] = useState([
+    {
+      id: 1,
+      type: 'warning',
+      title: 'NOC pending approval',
+      description: 'Your NOC application is waiting for faculty review',
+      time: '2 hours ago',
+      urgency: 'medium'
+    },
+    {
+      id: 2,
+      type: 'error',
+      title: 'Attendance not marked today',
+      description: 'Please mark your attendance for today',
+      time: '30 minutes ago',
+      urgency: 'high'
+    },
+    {
+      id: 3,
+      type: 'deadline',
+      title: 'Report submission due',
+      description: 'Monthly internship report due in 3 days',
+      time: '1 day ago',
+      urgency: 'medium'
+    }
+  ]);
 
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                    <div>
-                        <h2 className="text-xl font-semibold text-gray-800">
-                            Dashboard Overview
-                        </h2>
-                        <p className="text-gray-600 mt-1">
-                            Track your applications and internship progress here.
-                        </p>
-                    </div>
+  // Function to add new alerts (for NOC status updates)
+  const addAlert = (alert) => {
+    setAlerts(prev => [alert, ...prev]);
+  };
 
-                    <div className="flex items-center gap-3">
-                        <Link
-                            to="/student/noc-request"
-                            className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors duration-200"
-                        >
-                            + Request NOC
-                        </Link>
-                    </div>
-                </div>
+  // Simulate NOC status update alerts
+  const simulateNOCAlerts = () => {
+    // This would be called from NOC form or other components
+    // For now, we'll keep the initial alerts
+  };
 
-                {/* Recent Applications */}
-                <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-                    <div className="px-4 py-5 sm:px-6">
-                        <h3 className="text-lg font-medium text-gray-900">
-                            Recent Applications
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                            Details of your most recent internship applications.
-                        </p>
-                    </div>
+  const internshipData = {
+    role: 'Software Development Intern',
+    company: 'Tech Solutions Inc.',
+    duration: 'Jan 2024 - Jun 2024',
+    status: 'Ongoing',
+    faculty: 'Dr. Sarah Johnson',
+    progress: 65
+  };
 
-                    <ul className="divide-y divide-gray-200">
-                        {[
-                            { company: 'TechCorp', role: 'Frontend Developer Intern', status: 'Applied', date: 'Oct 24, 2023' },
-                            { company: 'InnovateInc', role: 'UX/UI Designer Intern', status: 'Interview', date: 'Oct 22, 2023' },
-                            { company: 'DataSystems', role: 'Backend Developer Intern', status: 'Rejected', date: 'Oct 20, 2023' },
-                        ].map((app, index) => (
-                            <li key={index} className="px-4 py-4">
-                                <div className="flex justify-between">
-                                    <p className="text-primary font-medium">{app.role}</p>
-                                    <span
-                                        className={`px-2 py-1 text-xs rounded-full ${
-                                            app.status === 'Applied'
-                                                ? 'bg-blue-100 text-blue-800'
-                                                : app.status === 'Interview'
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-red-100 text-red-800'
-                                        }`}
-                                    >
-                                        {app.status}
-                                    </span>
-                                </div>
+  const nocData = {
+    status: 'Pending',
+    submittedDate: 'Oct 15, 2023',
+    updatedDate: 'Oct 18, 2023',
+    remarks: 'Awaiting faculty approval. Please ensure all documents are uploaded.'
+  };
 
-                                <div className="flex justify-between mt-2 text-sm text-gray-500">
-                                    <span>{app.company}</span>
-                                    <span>Applied on {app.date}</span>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+  const attendanceData = {
+    percentage: 92,
+    daysPresent: 46,
+    totalDays: 50,
+    todayStatus: 'pending',
+    weeklyStats: {
+      present: 4,
+      total: 5
+    }
+  };
+
+  const recentActivities = [
+    {
+      type: 'attendance',
+      title: 'Attendance marked',
+      description: 'Present for 8 hours',
+      time: 'Yesterday, 5:30 PM'
+    },
+    {
+      type: 'noc',
+      title: 'NOC application submitted',
+      description: 'For internship completion certificate',
+      time: '3 days ago'
+    },
+    {
+      type: 'faculty',
+      title: 'Faculty feedback received',
+      description: 'Monthly performance review completed',
+      time: '1 week ago'
+    }
+  ];
+
+  const quickActions = [
+    { id: 'noc', label: 'Apply for NOC', route: '/apply-noc' },
+    { id: 'attendance', label: 'Mark Attendance', route: '/attendance' },
+    { id: 'report', label: 'Submit Monthly Report', route: '/submit-report' },
+    { id: 'feedback', label: 'View Feedback', route: '/feedback' },
+  ];
+
+  return (
+    <StudentLayout>
+      <div className="p-6 max-w-7xl mx-auto">
+        {/* Greeting Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            👋 Welcome back, {userName}!
+          </h1>
+          <p className="text-lg text-gray-600">
+            Track your internship progress and academic requirements �
+          </p>
+        </div>
+
+        {/* Academic Insight */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-xl p-4 mb-8">
+          <p className="text-sm text-blue-800">
+            � Your internship is 65% complete. Keep up the good work! 🎯
+          </p>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Internship Status and NOC */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <InternshipStatusCard internship={internshipData} />
+              <NOCStatusTracker noc={nocData} />
             </div>
-        </StudentLayout>
-    );
+
+            {/* Attendance Tracker */}
+            <AttendanceTracker attendance={attendanceData} />
+
+            {/* Alerts and Notifications */}
+            <AlertsNotifications alerts={alerts} />
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-8">
+            {/* Quick Actions */}
+            <QuickActions actions={quickActions} />
+
+            {/* Recent Activity */}
+            <RecentActivity activities={recentActivities} />
+          </div>
+        </div>
+      </div>
+    </StudentLayout>
+  );
 };
 
 export default StudentDashboard;

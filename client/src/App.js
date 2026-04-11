@@ -4,13 +4,14 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import { Toaster } from 'react-hot-toast';
 // import StudentDashboard from './pages/student/Dashboard';
 import StudentDashboard from './pages/student/StudentDashboard';
 // import Internships from './pages/student/Internships';
 import Profile from './pages/student/Profile';
 import NOCRequest from './pages/student/NOCRequest';
 // import MyApplications from './pages/student/MyApplications';
-import MyApplicationsComplete from './pages/student/MyApplicationsComplete';
+import InternshipRecords from './pages/student/InternshipRecords';
 //  import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyDashboard from './pages/faculty/DashboardModern';
 //import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
@@ -25,12 +26,17 @@ import ApproveInternships from './pages/admin/ApproveInternships';
 // import NOCApproval from './pages/faculty/NOCApproval';
 import NOCApproval from './pages/faculty/NOCApprovalsFixed';
 import NOCApprovalAdmin from './pages/admin/NOCApprovalAdmin';
+import ApplyNOC from './pages/student/ApplyNOC';
+import Attendance from './pages/student/Attendance';
+import SubmitReport from './pages/student/SubmitReport';
+import Feedback from './pages/student/Feedback';
 import './App.css';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <Toaster position="top-right" />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
@@ -46,7 +52,11 @@ function App() {
 />
           
           <Route path="/student/noc-request" element={<ProtectedRoute allowedRoles={['student']}><NOCRequest /></ProtectedRoute>} />
-          <Route path="/student/applications" element={<ProtectedRoute allowedRoles={['student']}><MyApplicationsComplete /></ProtectedRoute>} />
+          <Route path="/student/applications" element={<ProtectedRoute allowedRoles={['student']}><InternshipRecords /></ProtectedRoute>} />
+          <Route path="/apply-noc" element={<ProtectedRoute allowedRoles={['student']}><ApplyNOC /></ProtectedRoute>} />
+          <Route path="/attendance" element={<ProtectedRoute allowedRoles={['student']}><Attendance /></ProtectedRoute>} />
+          <Route path="/submit-report" element={<ProtectedRoute allowedRoles={['student']}><SubmitReport /></ProtectedRoute>} />
+          <Route path="/feedback" element={<ProtectedRoute allowedRoles={['student']}><Feedback /></ProtectedRoute>} />
           <Route 
   path="/faculty/dashboard" 
   element={
