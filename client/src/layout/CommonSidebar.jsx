@@ -34,7 +34,7 @@ const CommonSidebar = ({ role }) => {
     //   icon: <BriefcaseIcon className="w-5 h-5" /> 
     // },
     { 
-      name: 'My Applications', 
+      name: 'Internship Records', 
       path: '/student/applications', 
       icon: <DocumentTextIcon className="w-5 h-5" /> 
     },
@@ -55,11 +55,6 @@ const CommonSidebar = ({ role }) => {
       name: 'Students', 
       path: '/faculty/students', 
       icon: <UsersIcon className="w-5 h-5" /> 
-    },
-    { 
-      name: 'Internships', 
-      path: '/faculty/internships', 
-      icon: <BriefcaseIcon className="w-5 h-5" /> 
     },
     { 
       name: 'NOC Approval', 
