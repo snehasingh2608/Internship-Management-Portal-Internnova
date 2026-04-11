@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StudentLayout from '../../layout/StudentLayout';
+import { attendanceAPI, handleAPIError, STUDENT_ID } from '../../api';
 import { 
   ArrowLeftIcon,
   CalendarIcon,
@@ -55,39 +56,71 @@ const Attendance = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Log attendance data to console (for now)
-    console.log('Attendance Marked:', {
-      ...formData,
-      markedAt: new Date().toISOString(),
-      status: 'Present'
-    });
+    try {
+      // Create FormData for file upload
+      const apiFormData = new FormData();
+      apiFormData.append('studentId', STUDENT_ID);
+      apiFormData.append('date', formData.date);
+      apiFormData.append('remarks', formData.remarks || '');
+      
+      // Add screenshot if exists
+      if (formData.screenshot) {
+        apiFormData.append('proof', formData.screenshot);
+      }
 
-    // Add to history
-    const newEntry = {
-      date: formData.date,
-      status: 'Present',
-      duration: '8 hours',
-      remarks: formData.remarks || 'Marked via attendance system'
-    };
-    
-    setAttendanceHistory(prev => [newEntry, ...prev]);
-    
-    // Show success message
-    setShowSuccess(true);
-    
-    // Reset form
-    setFormData({
-      date: new Date().toISOString().split('T')[0],
-      screenshot: null,
-      remarks: ''
-    });
-    
-    // Hide success message after 3 seconds
-    setTimeout(() => setShowSuccess(false), 3000);
+      // Send to backend
+      const response = await attendanceAPI.markAttendance(apiFormData);
+      
+      // Show success message
+      setShowSuccess(true);
+      
+      // Log response
+      console.log('Attendance Response:', response.data);
+
+      // Reset form
+      setFormData({
+        date: new Date().toISOString().split('T')[0],
+        screenshot: null,
+        remarks: ''
+      });
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => setShowSuccess(false), 3000);
+      
+      // Refresh attendance history
+      fetchAttendanceHistory();
+
+    } catch (error) {
+      console.error('Attendance Submission Error:', error);
+      
+      // Show error message (you could use toast here too)
+      alert(handleAPIError(error) || 'Failed to mark attendance. Please try again.');
+    }
   };
+
+  // Fetch attendance history from backend
+  const fetchAttendanceHistory = async () => {
+    try {
+      const response = await attendanceAPI.getAttendanceRecords(STUDENT_ID);
+      
+      if (response.data) {
+        setAttendanceHistory(response.data);
+      }
+      
+      console.log('Attendance History:', response.data);
+    } catch (error) {
+      console.error('Error fetching attendance history:', error);
+      // Keep using default data if API fails
+    }
+  };
+
+  // Fetch attendance history on component mount
+  useEffect(() => {
+    fetchAttendanceHistory();
+  }, []);
 
   const getStatusVariant = (status) => {
     switch (status) {
