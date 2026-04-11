@@ -67,9 +67,9 @@ const CommonSidebar = ({ role }) => {
       icon: <DocumentTextIcon className="w-5 h-5" /> 
     },
     { 
-      name: 'Attendance', 
-      path: '/faculty/attendance-monitoring', 
-      icon: <ClockIcon className="w-5 h-5" /> 
+      name: 'Attendance Dashboard', 
+      path: '/faculty/attendance', 
+      icon: <ChartBarIcon className="w-5 h-5" /> 
     },
     { 
       name: 'Reports', 

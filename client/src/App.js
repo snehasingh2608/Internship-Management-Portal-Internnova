@@ -10,11 +10,10 @@ import StudentDashboard from './pages/student/StudentDashboard';
 // import Internships from './pages/student/Internships';
 import Profile from './pages/student/Profile';
 import NOCRequest from './pages/student/NOCRequest';
-// import MyApplications from './pages/student/MyApplications';
+import MyApplicationsComplete from './pages/student/MyApplicationsComplete';
 import InternshipRecords from './pages/student/InternshipRecords';
-//  import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyDashboard from './pages/faculty/DashboardModern';
-//import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
+import AttendanceDashboard from './pages/faculty/AttendanceDashboard';
 import AttendanceMonitoring from './pages/faculty/AttendanceMonitoring';
 import Students from './pages/faculty/Students';
 import StudentLayout from './layout/StudentLayout';
@@ -51,8 +50,9 @@ function App() {
   } 
 />
           
+          <Route path="/student/profile" element={<ProtectedRoute allowedRoles={['student']}><Profile /></ProtectedRoute>} />
           <Route path="/student/noc-request" element={<ProtectedRoute allowedRoles={['student']}><NOCRequest /></ProtectedRoute>} />
-          <Route path="/student/applications" element={<ProtectedRoute allowedRoles={['student']}><InternshipRecords /></ProtectedRoute>} />
+          <Route path="/student/applications" element={<ProtectedRoute allowedRoles={['student']}><MyApplicationsComplete /></ProtectedRoute>} />
           <Route path="/apply-noc" element={<ProtectedRoute allowedRoles={['student']}><ApplyNOC /></ProtectedRoute>} />
           <Route path="/attendance" element={<ProtectedRoute allowedRoles={['student']}><Attendance /></ProtectedRoute>} />
           <Route path="/submit-report" element={<ProtectedRoute allowedRoles={['student']}><SubmitReport /></ProtectedRoute>} />
@@ -65,8 +65,8 @@ function App() {
     </ProtectedRoute>
   } 
 />
-          {/* <Route path="/faculty/dashboard" element={<ProtectedRoute allowedRoles={['faculty']}><FacultyDashboard /></ProtectedRoute>} />
-          <Route path="/faculty/attendance" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceDashboard /></ProtectedRoute>} /> */}
+          <Route path="/faculty/dashboard" element={<ProtectedRoute allowedRoles={['faculty']}><FacultyDashboard /></ProtectedRoute>} />
+          <Route path="/faculty/attendance" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceDashboard /></ProtectedRoute>} />
           <Route path="/faculty/attendance-monitoring" element={<ProtectedRoute allowedRoles={['faculty']}><AttendanceMonitoring /></ProtectedRoute>} />
           <Route path="/faculty/students" element={<ProtectedRoute allowedRoles={['faculty']}><Students /></ProtectedRoute>} />
           <Route path="/faculty/reports" element={<ProtectedRoute allowedRoles={['faculty']}><Reports /></ProtectedRoute>} />
@@ -83,3 +83,5 @@ function App() {
 }
 
 export default App;
+
+

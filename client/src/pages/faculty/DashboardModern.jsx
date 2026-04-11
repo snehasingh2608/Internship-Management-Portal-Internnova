@@ -46,7 +46,7 @@ const DashboardModern = () => {
   const fetchDashboardData = async () => {
     try {
       const [internshipsRes, nocRes, metricsRes, activityRes] = await Promise.all([
-        internshipAPI.getMyListings(),
+        internshipAPI.getAll(),
         nocAPI.getPending(),
         facultyAPI.getDashboardMetrics(),
         facultyAPI.getRecentActivity()

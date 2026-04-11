@@ -56,7 +56,7 @@ export const internshipAPI = {
 // Applications
 export const applicationAPI = {
   apply: (internshipId) => api.post("/api/applications", { internshipId }),
-  getMyApplications: (studentId) => api.get(`/api/applications/student/${studentId}`),
+  getMyApplications: () => api.get(`/api/applications/my`),
   getByInternship: (internshipId) => api.get(`/api/applications/internship/${internshipId}`),
 };
 
