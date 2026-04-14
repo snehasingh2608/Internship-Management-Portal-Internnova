@@ -68,7 +68,7 @@ api.interceptors.response.use(
   }
 );
 
-// NOC API endpoints - Fixed to match backend routes
+// NOC API endpoints
 export const nocAPI = {
   // Submit NOC application
   submitNOC: (data) => api.post('/api/noc-requests', data, {

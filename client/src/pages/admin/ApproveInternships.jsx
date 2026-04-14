@@ -3,7 +3,7 @@ import Navbar from '../../layout/Navbar';
 import Sidebar from '../../layout/Sidebar';
 import { nocAPI } from '../../api/api';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE = process.env.REACT_APP_API_URL || 'https://internnova-backend.onrender.com';
 
 const ApproveInternships = () => {
     const [requests, setRequests] = useState([]);

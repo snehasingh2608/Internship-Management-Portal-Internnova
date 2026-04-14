@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Base Axios instance
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // change if needed
+  baseURL: process.env.REACT_APP_API_URL || "https://internnova-backend.onrender.com/api", // change if needed
   headers: {
     "Content-Type": "application/json",
   },

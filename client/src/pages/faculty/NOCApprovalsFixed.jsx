@@ -217,7 +217,7 @@ const NOCApprovals = () => {
                     onClick={() => {
                       let url = selectedNOC.documentUrl || selectedNOC.offerLetterUrl;
                       if (!url.startsWith('http')) {
-                        const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+                        const API_BASE = process.env.REACT_APP_API_URL || "https://internnova-backend.onrender.com";
                         url = `${API_BASE}${url.startsWith('/') ? '' : '/'}${url}`;
                       }
                       window.open(url, "_blank");

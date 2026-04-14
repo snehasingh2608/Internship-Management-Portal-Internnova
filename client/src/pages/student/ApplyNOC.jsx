@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import StudentLayout from '../../layout/StudentLayout';
-import { nocAPI, handleAPIError, STUDENT_ID } from '../../api';
+import { nocAPI, handleAPIError } from '../../api';
 import { 
   ArrowLeftIcon,
   DocumentArrowUpIcon,
@@ -12,18 +12,15 @@ import {
   CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 
-import { useAuth } from '../../context/AuthContext';
-
 const ApplyNOC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
 
   const [formData, setFormData] = useState({
-    // Student Details
-    name: user?.name || '',
-    rollNumber: user?.rollNumber || '',
-    branch: user?.department || '',
-    semester: user?.year ? `${user?.year} Year` : '',
+    // Student Details - All user input
+    name: '',
+    rollNumber: '',
+    branch: '',
+    semester: '',
     
     // Internship Details
     companyName: '',
@@ -54,17 +51,26 @@ const ApplyNOC = () => {
     e.preventDefault();
     
     try {
-      // Create FormData for file uploads
+      // Create FormData with correct field names that backend expects
       const apiFormData = new FormData();
-      apiFormData.append('studentId', STUDENT_ID);
+      
+      // Student details
+      apiFormData.append('name', formData.name);
+      apiFormData.append('rollNumber', formData.rollNumber);
+      apiFormData.append('branch', formData.branch);
+      apiFormData.append('semester', formData.semester);
+      
+      // Internship details
       apiFormData.append('companyName', formData.companyName);
       apiFormData.append('role', formData.role);
       apiFormData.append('startDate', formData.startDate);
       apiFormData.append('duration', formData.duration);
       apiFormData.append('stipend', formData.stipend);
+      
+      // Additional fields
       apiFormData.append('remarks', formData.remarks);
       
-      // Add files if they exist
+      // Files with correct field names
       if (formData.offerLetter) {
         apiFormData.append('offerLetter', formData.offerLetter);
       }
@@ -140,57 +146,61 @@ const ApplyNOC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
+                  Student Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  readOnly
+                  placeholder="Enter your full name"
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Roll Number
+                  Roll Number <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="rollNumber"
                   value={formData.rollNumber}
                   onChange={handleInputChange}
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  readOnly
+                  placeholder="e.g., 2021CS1234"
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Branch
+                  Branch <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="branch"
                   value={formData.branch}
                   onChange={handleInputChange}
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  readOnly
+                  placeholder="e.g., Computer Science and Engineering"
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Semester
+                  Semester <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="semester"
                   value={formData.semester}
                   onChange={handleInputChange}
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  readOnly
+                  placeholder="e.g., 6th Semester"
                 />
               </div>
             </div>

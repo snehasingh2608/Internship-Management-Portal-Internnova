@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { nocAPI } from "../../api/api";
-import { FaCheck, FaTimes } from "react-icons/fa";
 import Navbar from '../../layout/Navbar';
 import Sidebar from '../../layout/Sidebar';
 
-const BASE_URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace('/api', '') : 'http://localhost:5000';
+const BASE_URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace('/api', '') : 'https://internnova-backend.onrender.com';
 
 const NOCApprovalAdmin = () => {
   const [requests, setRequests] = useState([]);
